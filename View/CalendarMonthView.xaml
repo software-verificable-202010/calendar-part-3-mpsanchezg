@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="CalendarApp.View.CalendarMonthView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CalendarApp.View" xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:viewModel="clr-namespace:CalendarApp.ViewModel"
+             xmlns:data="clr-namespace:CalendarApp.Model"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewModel:CalendarMonthViewModel/>
+    </UserControl.DataContext>
+    <Grid Margin="10">
+        <ItemsControl ItemsSource="{Binding DaysOfCurrentMonth}" Margin="115,95,120,59.6">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="7" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Content="{Binding Date.Day}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Button Content="Next"
+            Margin="555,0,170,14.6"
+            Command="{Binding GoToNextMonthCommand}" 
+            RenderTransformOrigin="0.5,0.5" Height="30" VerticalAlignment="Bottom"
+            />
+        <Button Content="Last"
+            Margin="165,0,560,14.6"
+            Command="{Binding GoToLastMonthCommand}" 
+            RenderTransformOrigin="-0.001,4.636" Height="30" VerticalAlignment="Bottom"
+            />
+        <Label x:Name="label_monday" Content="Lunes" HorizontalAlignment="Left" Margin="115,45,0,0" VerticalAlignment="Top" Height="45" Width="75"/>
+        <Label x:Name="label_tuesday" Content="Martes" HorizontalAlignment="Left" Margin="195,45,0,0" VerticalAlignment="Top" Height="45" Width="75"/>
+        <Label x:Name="label_wednesday" Content="Miercoles" HorizontalAlignment="Left" Margin="275,45,0,0" VerticalAlignment="Top" Height="45" Width="75"/>
+        <Label x:Name="label_thursday" Content="Jueves" HorizontalAlignment="Left" Margin="355,45,0,0" VerticalAlignment="Top" Height="45" Width="75"/>
+        <Label x:Name="label_friday" Content="Viernes" HorizontalAlignment="Left" Margin="430,45,0,0" VerticalAlignment="Top" Height="45" Width="75"/>
+        <Label x:Name="label_saturday" Content="Sabado" HorizontalAlignment="Left" Margin="505,45,0,0" VerticalAlignment="Top" Height="45" Width="75"/>
+        <Label x:Name="label_sunday" Content="Domingo" HorizontalAlignment="Left" Margin="580,45,0,0" VerticalAlignment="Top" Height="45" Width="75" RenderTransformOrigin="4.464,0.56"/>
+        <Label x:Name="label_month" Content="{Binding CurrentMonthName}" HorizontalAlignment="Left" Margin="315,10,0,0" VerticalAlignment="Top" Height="30" Width="75"/>
+        <Label x:Name="label_year" Content="{Binding CurrentYear}" HorizontalAlignment="Left" Margin="390,10,0,0" VerticalAlignment="Top" Height="30" Width="75"/>
+    </Grid>
+</UserControl>

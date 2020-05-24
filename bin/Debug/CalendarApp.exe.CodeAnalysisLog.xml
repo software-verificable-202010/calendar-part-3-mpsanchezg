@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="c:\program files (x86)\microsoft visual studio\2019\preview\team tools\static analysis tools\fxcop\Xml\CodeAnalysisReport.xsl"?>
+<FxCopReport Version="16.0">
+ <Targets>
+  <Target Name="D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Project\CalendarApp\bin\Debug\CalendarApp.exe">
+   <Modules>
+    <Module Name="calendarapp.exe">
+     <Messages>
+      <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Status="Active" Created="2020-05-24 00:54:49Z" FixCategory="NonBreaking">
+       <Issue Name="NoStrongName" Certainty="95" Level="CriticalError">Firme 'CalendarApp.exe' con una clave de nombre seguro.</Issue>
+      </Message>
+     </Messages>
+     <Namespaces>
+      <Namespace Name="CalendarApp.Model">
+       <Types>
+        <Type Name="CalendarMonthModel" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#DaysOfMonth" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="DoNotExposeGenericLists" Category="Microsoft.Design" CheckId="CA1002" Status="Active" Created="2020-05-24 00:54:49Z" FixCategory="Breaking">
+             <Issue Certainty="95" Level="Error" Path="D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Project\CalendarApp\Model" File="CalendarMonthModel.cs" Line="35">Cambie ''List&lt;DateTime&gt;'' en 'CalendarMonthModel.DaysOfMonth' para que use Collection&lt;T&gt;, ReadOnlyCollection&lt;T&gt; o KeyedCollection&lt;K,V&gt;</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="CalendarWeekModel" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#DaysOfWeek" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="DoNotExposeGenericLists" Category="Microsoft.Design" CheckId="CA1002" Status="Active" Created="2020-05-24 00:54:49Z" FixCategory="Breaking">
+             <Issue Certainty="95" Level="Error" Path="D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Project\CalendarApp\Model" File="CalendarWeekModel.cs" Line="27">Cambie ''List&lt;DateTime&gt;'' en 'CalendarWeekModel.DaysOfWeek' para que use Collection&lt;T&gt;, ReadOnlyCollection&lt;T&gt; o KeyedCollection&lt;K,V&gt;</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#GetDaysOfWeekBySelectedDay(System.DateTime)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message Id="selectedDateOfWeek" TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500" Status="Active" Created="2020-05-24 00:54:49Z" FixCategory="NonBreaking">
+             <Issue Name="Parameter" Certainty="95" Level="Error" Path="D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Project\CalendarApp\Model" File="CalendarWeekModel.cs" Line="30">'selectedDateOfWeek', un parámetro declarado en 'CalendarWeekModel.GetDaysOfWeekBySelectedDay(DateTime)', tiene el mismo nombre que el campo de instancia en el tipo. Cambie el nombre de uno de estos elementos.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="Constants" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#MonthNames" Kind="Property" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="DoNotExposeGenericLists" Category="Microsoft.Design" CheckId="CA1002" Status="Active" Created="2020-05-24 00:54:49Z" FixCategory="Breaking">
+             <Issue Certainty="95" Level="Error" Path="D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Project\CalendarApp\Static" File="Constants.cs" Line="37">Cambie ''List&lt;string&gt;'' en 'Constants.MonthNames' para que use Collection&lt;T&gt;, ReadOnlyCollection&lt;T&gt; o KeyedCollection&lt;K,V&gt;</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="CalendarApp.ViewModel">
+       <Types>
+        <Type Name="CalendarMonthViewModel" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#DaysOfCurrentMonth" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="DoNotExposeGenericLists" Category="Microsoft.Design" CheckId="CA1002" Status="Active" Created="2020-05-24 00:54:49Z" FixCategory="Breaking">
+             <Issue Certainty="95" Level="Error" Path="D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Project\CalendarApp\ViewModel" File="CalendarMonthViewModel.cs" Line="63">Cambie ''List&lt;DateTime&gt;'' en 'CalendarMonthViewModel.DaysOfCurrentMonth' para que use Collection&lt;T&gt;, ReadOnlyCollection&lt;T&gt; o KeyedCollection&lt;K,V&gt;</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="CalendarWeekViewModel" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#DaysOfCurrentWeek" Kind="Property" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="DoNotExposeGenericLists" Category="Microsoft.Design" CheckId="CA1002" Status="Active" Created="2020-05-24 00:54:49Z" FixCategory="Breaking">
+             <Issue Certainty="95" Level="Error" Path="D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Project\CalendarApp\ViewModel" File="CalendarWeekViewModel.cs" Line="38">Cambie ''List&lt;DateTime&gt;'' en 'CalendarWeekViewModel.DaysOfCurrentWeek' para que use Collection&lt;T&gt;, ReadOnlyCollection&lt;T&gt; o KeyedCollection&lt;K,V&gt;</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+ </Targets>
+ <Rules>
+  <Rule TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210">
+   <Name>Los ensamblados deben tener nombres seguros válidos</Name>
+   <Description>Puede que el ensamblado no tenga un nombre seguro, que no sea válido o que éste sea válido únicamente por la configuración del equipo. No se puede implementar el ensamblado en este estado. Las causas más probables son: 1) El contenido del ensamblado se modificó después de firmarlo. 2) Error en el proceso de firma. 3) El ensamblado tenía firma retardada. 4) Existía una clave del Registro que permitió que se realizara la comprobación (de lo contrario no se hubiera realizado).</Description>
+   <Resolution Name="NoStrongName">Firme {0} con una clave de nombre seguro.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182127.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">CriticalError</MessageLevel>
+   <File Name="designrules.dll" Version="16.0.0.0" />
+  </Rule>
+  <Rule TypeName="DoNotExposeGenericLists" Category="Microsoft.Design" CheckId="CA1002">
+   <Name>No exponer listas genéricas</Name>
+   <Description>No exponga List&lt;T&gt; en modelos de objetos. Utilice Collection&lt;T&gt;, ReadOnlyCollection&lt;T&gt; o KeyedCollection&lt;K,V&gt; en su lugar. Debe utilizar List&lt;T&gt; desde la implementación, no en la API de modelo de objetos. List&lt;T&gt; está optimizado para el rendimiento de versiones a largo plazo. Por ejemplo, si devuelve List&lt;T&gt; al código del cliente, no podrá recibir notificaciones cuando el código del cliente modifique la colección.</Description>
+   <Resolution Name="Default">Cambie '{0}' en {1} para que use Collection&lt;T&gt;, ReadOnlyCollection&lt;T&gt; o KeyedCollection&lt;K,V&gt;</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182142.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
+   <File Name="designrules.dll" Version="16.0.0.0" />
+  </Rule>
+  <Rule TypeName="VariableNamesShouldNotMatchFieldNames" Category="Microsoft.Maintainability" CheckId="CA1500">
+   <Name>Los nombres de las variables no deben coincidir con los nombres de los campos</Name>
+   <Description>El campo de instancia y los nombres de variables no deben ser idénticos dentro del mismo ámbito.</Description>
+   <Resolution Name="Parameter">{0}, un parámetro declarado en {1}, tiene el mismo nombre que el campo de instancia en el tipo. Cambie el nombre de uno de estos elementos.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182216.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
+   <File Name="maintainabilityrules.dll" Version="16.0.0.0" />
+  </Rule>
+ </Rules>
+ <Localized>
+  <String Key="Category">Categoría</String>
+  <String Key="Certainty">Certeza</String>
+  <String Key="CollapseAll">Contraer todo</String>
+  <String Key="CheckId">Comprobar id.</String>
+  <String Key="Error">Error</String>
+  <String Key="Errors">errores</String>
+  <String Key="ExpandAll">Expandir todo</String>
+  <String Key="Help">Ayuda</String>
+  <String Key="Line">Línea</String>
+  <String Key="Messages">mensajes</String>
+  <String Key="LocationNotStoredInPdb">[Ubicación no almacenada en Pdb]</String>
+  <String Key="Project">Proyecto</String>
+  <String Key="Resolution">Resolución</String>
+  <String Key="Rule">Regla</String>
+  <String Key="RuleFile">Archivo de regla</String>
+  <String Key="RuleDescription">Descripción de la regla</String>
+  <String Key="Source">Origen</String>
+  <String Key="Status">Estado</String>
+  <String Key="Target">Círculos concéntricos</String>
+  <String Key="Warning">Advertencia</String>
+  <String Key="Warnings">advertencias</String>
+  <String Key="ReportTitle">Informe de análisis del código</String>
+ </Localized>
+</FxCopReport>
