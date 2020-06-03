@@ -5,14 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CalendarApp.View" xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:viewModel="clr-namespace:CalendarApp.ViewModel"
-             xmlns:data="clr-namespace:CalendarApp.Model"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
         <viewModel:CalendarMonthViewModel/>
     </UserControl.DataContext>
     <Grid Margin="10">
-        <ItemsControl ItemsSource="{Binding DaysOfCurrentMonth}" Margin="115,95,120,59.6">
+        <ItemsControl x:Name="month_calendar" ItemsSource="{Binding DaysOfCurrentMonth}" Margin="115,90,120,64.6">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Columns="7" />
@@ -20,7 +19,9 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Content="{Binding Date.Day}" />
+                    <Grid Background="{Binding Color}">
+                        <TextBlock Text="{Binding Date.Day}"/>
+                    </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

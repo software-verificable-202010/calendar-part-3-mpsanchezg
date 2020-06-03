@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,14 @@ namespace CalendarApp.ViewModel
 		private string currentMonthName;
 		private int currentYear;
 		private CalendarMonthModel currentCalendarMonth;
-		private List<DateTime> daysOfCurrentMonth;
+		private List<CalendarDayModel> daysOfCurrentMonth;
+		private RelayCommand goToLastMonthCommand;
+		private RelayCommand goToNextMonthCommand;
+		private const string daysOfCurrentMonthProp = "DaysOfCurrentMonth";
+		private const string currrentMonthProp = "CurrentYear";
+		private const string currentMonthNameProp = "CurrentMonthName";
+		private const string currentYearProp = "CurrentYear";
+		private const string currentCalendarMonthProp = "CurrentCalendarMonth";
 
 		public CalendarMonthViewModel()
 		{			
@@ -30,14 +38,18 @@ namespace CalendarApp.ViewModel
 			GoToLastMonthCommand = new RelayCommand(OnGoToLastMonth, CanGoToLastMonth);
 		}
 
-		public DateTime CurrentDate { get => currentDate; set =>currentDate = value; }
+		public DateTime CurrentDate
+		{
+			get => currentDate; 
+			set =>currentDate = value;
+		}
 		public int CurrentMonth { 
 			get => currentMonth; 
 			set 
 			{ 
 				currentMonth = GetCorrectNumberOfMonth(value);
 				CurrentMonthName = Constants.MonthNames[currentMonth - Constants.OneMonth];
-				NotifyPropertyChanged("CurrentMonth");
+				NotifyPropertyChanged(currrentMonthProp);
 			}
 		}
 		public string CurrentMonthName 
@@ -45,7 +57,7 @@ namespace CalendarApp.ViewModel
 			get => currentMonthName;
 			set { 
 				currentMonthName = value;
-				NotifyPropertyChanged("CurrentMonthName");
+				NotifyPropertyChanged(currentMonthNameProp);
 			}
 		}
 		public int CurrentYear 
@@ -54,17 +66,17 @@ namespace CalendarApp.ViewModel
 			set 
 			{ 
 				currentYear = value;
-				NotifyPropertyChanged("CurrentYear");
+				NotifyPropertyChanged(currentYearProp);
 
 			}
 		}
-		public List<DateTime> DaysOfCurrentMonth 
+		public List<CalendarDayModel> DaysOfCurrentMonth 
 		{ 
 			get => daysOfCurrentMonth;
 			set 
 			{ 
 				daysOfCurrentMonth = value;
-				NotifyPropertyChanged("DaysOfCurrentMonth");
+				NotifyPropertyChanged(daysOfCurrentMonthProp);
 			}
 		}
 		public CalendarMonthModel CurrentCalendarMonth
@@ -73,18 +85,30 @@ namespace CalendarApp.ViewModel
 			set
 			{
 				currentCalendarMonth = value;
-				CurrentMonth = currentCalendarMonth.MonthNumber;
-				CurrentYear = currentCalendarMonth.YearOfMonth;
-				SetMissingLastDaysOfWeekToCalendarMonth(currentCalendarMonth);
-				NotifyPropertyChanged("CurrentCalendarMonth");
-
+				if(currentCalendarMonth != null)
+				{
+					CurrentMonth = currentCalendarMonth.MonthNumber;
+					CurrentYear = currentCalendarMonth.YearOfMonth;
+					SetMissingLastDaysOfWeekToCalendarMonth(currentCalendarMonth);
+					NotifyPropertyChanged(currentCalendarMonthProp);
+				}
 			}
+		}
+		public RelayCommand GoToNextMonthCommand
+		{
+			get => goToNextMonthCommand;
+			set => goToNextMonthCommand = value;
+		}
+		public RelayCommand GoToLastMonthCommand
+		{
+			get => goToLastMonthCommand;
+			set => goToLastMonthCommand = value;
 		}
 
 		private void SetMissingLastDaysOfWeekToCalendarMonth(CalendarMonthModel calendarMonthModel)
 		{
-			DateTime firstDayOfMonth = calendarMonthModel.DaysOfMonth.First();
-			if (FirstDayIsMonday(firstDayOfMonth))
+			CalendarDayModel firstDayOfMonth = calendarMonthModel.DaysOfMonth.First();
+			if (FirstDayIsMonday(firstDayOfMonth.Date))
 			{
 				DaysOfCurrentMonth = currentCalendarMonth.DaysOfMonth;
 				return;
@@ -100,22 +124,23 @@ namespace CalendarApp.ViewModel
 			}
 			return false;
 		}
-		private List<DateTime> AddDaysOfLastMonth(CalendarMonthModel calendarMonthModel)
+		private List<CalendarDayModel> AddDaysOfLastMonth(CalendarMonthModel calendarMonthModel)
 		{
-			List<DateTime> daysOfCalendarMonth = calendarMonthModel.DaysOfMonth;
-			DateTime firstDayOfDateTimes = daysOfCalendarMonth[Constants.FirstElement];
-			int numberOfDayOfWeek = (int)firstDayOfDateTimes.DayOfWeek;
+			List<CalendarDayModel> daysOfCalendarMonth = calendarMonthModel.DaysOfMonth;
+			CalendarDayModel firstDayOfDateTimes = daysOfCalendarMonth[Constants.FirstElement];
+			int numberOfDayOfWeek = (int)firstDayOfDateTimes.Date.DayOfWeek;
 			int yearOfCalendarMonth = calendarMonthModel.YearOfMonth;
 			int lastMonth = GetCorrectNumberOfMonth(calendarMonthModel.MonthNumber - Constants.OneMonth);
 			int numberOfDayInLastMonth = DateTime.DaysInMonth(yearOfCalendarMonth, lastMonth);
 			int numberOfMissingDays = GetNumberOfMissingDays(numberOfDayOfWeek);
-			DateTime dayToAdd;
 			int numberOfDayToAdd;
 
 			for (int day = Constants.StartDayNumber; day < numberOfMissingDays; day++)
 			{
 				numberOfDayToAdd = numberOfDayInLastMonth - day;
-				dayToAdd = new DateTime(yearOfCalendarMonth, lastMonth, numberOfDayToAdd);
+				DateTime dateOfDayToAdd = new DateTime(yearOfCalendarMonth, lastMonth, numberOfDayToAdd);
+				string colorOfDayToAdd = Constants.ColorOfDaysOfOtherMonth;
+				CalendarDayModel dayToAdd = new CalendarDayModel(dateOfDayToAdd, colorOfDayToAdd);
 				daysOfCalendarMonth.Insert(Constants.FirstElement, dayToAdd);
 			}
 			return daysOfCalendarMonth;
@@ -141,7 +166,6 @@ namespace CalendarApp.ViewModel
 		}
 
 		
-		public RelayCommand GoToNextMonthCommand { get; }
 		private bool CanGoToNextMonth()
 		{
 			return true;
@@ -158,7 +182,6 @@ namespace CalendarApp.ViewModel
 			CurrentCalendarMonth = new CalendarMonthModel(nextMonth, yearOfNextMonth);
 		}
 
-		public RelayCommand GoToLastMonthCommand { get; }
 
 		private bool CanGoToLastMonth()
 		{			
@@ -181,7 +204,9 @@ namespace CalendarApp.ViewModel
 		{
 			PropertyChangedEventHandler handler = PropertyChanged;
 			if (null != handler)
+			{
 				PropertyChangedDelegate(propertyName, handler);
+			}
 		}
 		private void PropertyChangedDelegate(string propertyName, PropertyChangedEventHandler handler)
 		{

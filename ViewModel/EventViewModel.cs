@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CalendarApp.ViewModel
 {
@@ -16,11 +17,17 @@ namespace CalendarApp.ViewModel
 		private string description;
 		private DateTime startDateAndTime;
 		private DateTime finishDateAndTime;
-		public EventContext db;
+		private const string finishDateAndTimeProperty = "FinishDateAndTime";
+		private const string startDateAndTimeProperty = "StartDateAndTime";
+		private const string descriptionProperty = "Description";
+		private const string titleProperty = "Title";
+		public EventModelContext db;
 
 		public EventViewModel()
 		{
-			db = new EventContext();
+			db = new EventModelContext();
+			StartDateAndTime = DateTime.Today;
+			FinishDateAndTime = DateTime.Today;
 			CreateEventCommand = new RelayCommand(OnCreateEvent, CanCreateEvent);
 		}
 
@@ -30,7 +37,7 @@ namespace CalendarApp.ViewModel
 			set 
 			{ 
 				finishDateAndTime = value; 
-				NotifyPropertyChanged("FinishDateAndTime"); 
+				NotifyPropertyChanged(finishDateAndTimeProperty); 
 			} 
 		}
 		public DateTime StartDateAndTime 
@@ -38,7 +45,7 @@ namespace CalendarApp.ViewModel
 			get => startDateAndTime; 
 			set{ 
 				startDateAndTime = value; 
-				NotifyPropertyChanged("StartDateAndTime"); 
+				NotifyPropertyChanged(startDateAndTimeProperty); 
 			} 
 		}
 		public string Description 
@@ -47,24 +54,20 @@ namespace CalendarApp.ViewModel
 			set
 			{
 				description = value;
-				NotifyPropertyChanged("Description");
+				NotifyPropertyChanged(descriptionProperty);
 			}
 		}
-		public string Title { get => title; set
+		public string Title 
+		{ 
+			get => title; 
+			set
 			{
 				title = value;
-				NotifyPropertyChanged("Title");
+				NotifyPropertyChanged(titleProperty);
 			}
 		}
 
-		public event PropertyChangedEventHandler PropertyChanged;
-		private void NotifyPropertyChanged(String propertyName)
-		{
-			PropertyChangedEventHandler handler = PropertyChanged;
-			if (null != handler)
-				PropertyChangedDelegate(propertyName, handler);
-		}
-
+		
 		public RelayCommand CreateEventCommand { get; }
 		private bool CanCreateEvent()
 		{
@@ -72,9 +75,35 @@ namespace CalendarApp.ViewModel
 		}
 		private void OnCreateEvent()
 		{
-			EventModel eventModel = new EventModel(Title, StartDateAndTime, FinishDateAndTime, Description);
+			const string messageBoxTitle = "Alerta.";
+			if (AreValidData(Title, StartDateAndTime, FinishDateAndTime))
+			{
+				CreateEvent(Title, StartDateAndTime, FinishDateAndTime, Description);
+				MessageBox.Show(Constants.SuccessfulEvent, messageBoxTitle, MessageBoxButton.OK);
+				return;
+			}
+			MessageBox.Show(Constants.FailedEvent, messageBoxTitle, MessageBoxButton.OK);
+		}
+
+		private void CreateEvent(string title, DateTime startDateAndTime, DateTime finishDateAndTime, string description)
+		{
+			EventModel eventModel = new EventModel(title, startDateAndTime, finishDateAndTime, description);
 			db.Add(eventModel);
 			db.SaveChanges();
+		}
+		private bool AreValidData(string title, DateTime startDateAndTime, DateTime finishDateAndTime)
+		{
+			return startDateAndTime < finishDateAndTime && title != null;
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+		private void NotifyPropertyChanged(String propertyName)
+		{
+			PropertyChangedEventHandler handler = PropertyChanged;
+			if (null != handler)
+			{
+				PropertyChangedDelegate(propertyName, handler);
+			}
 		}
 
 		private void PropertyChangedDelegate(string propertyName, PropertyChangedEventHandler handler)

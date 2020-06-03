@@ -10,19 +10,23 @@ namespace CalendarApp.ViewModel
 	public class CalendarWeekViewModel : INotifyPropertyChanged
 	{
 		private DateTime currentDay;
-		private List<DateTime> daysOfCurrentWeek;
+		private List<CalendarDayModel> daysOfCurrentWeek;
 		private string currentMonth;
 		private int currentYear;
 		private CalendarWeekModel currentCalendarWeek;
+		private RelayCommand goToNextWeekCommand;
+		private RelayCommand goToLastWeekCommand;
+		private const string currentDayProperty = "CurrentDay";
+		private const string currentCalendarWeekProperty = "CurrentCalendarWeek";
+		private const string daysOfCurrentWeekProperty = "DaysOfCurrentWeek";
 
 		public CalendarWeekViewModel()
 		{
-			CurrentDay = DateTime.Now;
+			CurrentDay = DateTime.Today;
 			CurrentCalendarWeek = new CalendarWeekModel(CurrentDay);
 			DaysOfCurrentWeek = CurrentCalendarWeek.DaysOfWeek;
 			GoToNextWeekCommand = new RelayCommand(OnGoToNextWeek, CanGoToNextWeek);
 			GoToLastWeekCommand = new RelayCommand(OnGoToLastWeek, CanGoToLastWeek);
-
 		}
 
 		public DateTime CurrentDay 
@@ -30,10 +34,10 @@ namespace CalendarApp.ViewModel
 			get => currentDay;
 			set { 
 				currentDay = value;
-				NotifyPropertyChanged("CurrentDay");
+				NotifyPropertyChanged(currentDayProperty);
 			}
 		}
-		public List<DateTime> DaysOfCurrentWeek
+		public List<CalendarDayModel> DaysOfCurrentWeek
 		{ 
 			get => daysOfCurrentWeek;
 			set 
@@ -41,7 +45,7 @@ namespace CalendarApp.ViewModel
 				daysOfCurrentWeek = value;
 				ChangeMonthOfWeek();
 				ChangeYearOfWeek();
-				NotifyPropertyChanged("DaysOfCurrentWeek");
+				NotifyPropertyChanged(daysOfCurrentWeekProperty);
 			} 
 		}
 		public CalendarWeekModel CurrentCalendarWeek
@@ -50,7 +54,7 @@ namespace CalendarApp.ViewModel
 			set
 			{
 				currentCalendarWeek = value;
-				NotifyPropertyChanged("CurrentCalendarWeek");
+				NotifyPropertyChanged(currentCalendarWeekProperty);
 			}
 		}
 		public string CurrentMonth
@@ -71,9 +75,17 @@ namespace CalendarApp.ViewModel
 				NotifyPropertyChanged("CurrentYear");
 			}
 		}
+		public RelayCommand GoToNextWeekCommand
+		{
+			get => goToNextWeekCommand;
+			set => goToNextWeekCommand = value;
+		}
+		public RelayCommand GoToLastWeekCommand
+		{
+			get => goToLastWeekCommand;
+			set => goToLastWeekCommand = value;
+		}
 
-
-		public RelayCommand GoToNextWeekCommand { get; }
 		private bool CanGoToNextWeek()
 		{
 			return true;
@@ -81,10 +93,9 @@ namespace CalendarApp.ViewModel
 		private void OnGoToNextWeek()
 		{
 			CurrentDay = CurrentDay.AddDays(Constants.DaysOfAWeek);
-			DaysOfCurrentWeek = GetOtherDaysOfWeekByADay(CurrentDay);
+			DaysOfCurrentWeek = GetCalendarDaysOfWeek(CurrentDay);
 		}
 
-		public RelayCommand GoToLastWeekCommand { get; }
 		private bool CanGoToLastWeek()
 		{
 			return true;
@@ -92,10 +103,38 @@ namespace CalendarApp.ViewModel
 		private void OnGoToLastWeek()
 		{
 			CurrentDay = CurrentDay.AddDays(-Constants.DaysOfAWeek);
-			DaysOfCurrentWeek = GetOtherDaysOfWeekByADay(CurrentDay);
+			DaysOfCurrentWeek = GetCalendarDaysOfWeek(CurrentDay);
 		}
 
 
+		private List<CalendarDayModel> GetCalendarDaysOfWeek(DateTime day)
+		{
+			List<CalendarDayModel> calendarDaysOfWeek = new List<CalendarDayModel>();
+			List<DateTime> daysOfWeek = GetOtherDaysOfWeekByADay(day);
+			for (int dayOfWeekIndex = Constants.FirstElement; dayOfWeekIndex < Constants.DaysOfAWeek; dayOfWeekIndex++)
+			{
+				string colorOfCalendarDay = PutColorOfCalendarDayOfWeek(daysOfWeek[dayOfWeekIndex]);
+				calendarDaysOfWeek.Add(new CalendarDayModel(daysOfWeek[dayOfWeekIndex], colorOfCalendarDay));
+			}
+
+			return calendarDaysOfWeek;
+		}
+		private string PutColorOfCalendarDayOfWeek(DateTime day)
+		{
+			if (IsToday(day))
+			{
+				return Constants.ColorOfToday;
+			}
+			else if (day.DayOfWeek != DayOfWeek.Saturday && day.DayOfWeek != DayOfWeek.Sunday)
+			{
+				return Constants.ColorOfWeek;
+			}
+			return Constants.ColorOfWeekend;
+		}
+		private bool IsToday(DateTime date)
+		{
+			return date == DateTime.Today;
+		}
 		private List<DateTime> GetOtherDaysOfWeekByADay(DateTime day)
 		{
 			List<DateTime> daysOfWeekBySelectedDay;
@@ -121,12 +160,12 @@ namespace CalendarApp.ViewModel
 
 		private void ChangeMonthOfWeek()
 		{
-			int monthOfThursday = DaysOfCurrentWeek[Constants.Thursday - Constants.OneDay].Month;
+			int monthOfThursday = DaysOfCurrentWeek[Constants.Thursday - Constants.OneDay].Date.Month;
 			CurrentMonth = Constants.MonthNames[monthOfThursday - Constants.OneMonth];
 		}
 		private void ChangeYearOfWeek()
 		{
-			CurrentYear = DaysOfCurrentWeek[Constants.Thursday - Constants.OneDay].Year;
+			CurrentYear = DaysOfCurrentWeek[Constants.Thursday - Constants.OneDay].Date.Year;
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -134,7 +173,9 @@ namespace CalendarApp.ViewModel
 		{
 			PropertyChangedEventHandler handler = PropertyChanged;
 			if (null != handler)
+			{
 				PropertyChangedDelegate(propertyName, handler);
+			}
 		}
 		private void PropertyChangedDelegate(string propertyName, PropertyChangedEventHandler handler)
 		{

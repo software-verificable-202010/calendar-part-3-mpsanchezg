@@ -25,13 +25,32 @@ namespace CalendarApp.Model
 			StartDateAndTime = start;
 			FinishDateAndTime = finish;
 			Description = description;
-
 		}
 		
-		public DateTime StartDateAndTime { get => startDateAndTime; set => startDateAndTime = value; }
-		public DateTime FinishDateAndTime { get => finishDateAndTime; set => finishDateAndTime = value; }
-		public string Title { get => title; set => title = value; }
-		public string Description { get => description; set => description = value; }
-		public int Id { get => id; set => id = value; }
+		public DateTime StartDateAndTime 
+		{ 
+			get => startDateAndTime; 
+			set => startDateAndTime = value; 
+		}
+		public DateTime FinishDateAndTime 
+		{ 
+			get => finishDateAndTime; 
+			set => finishDateAndTime = value; 
+		}
+		public string Title 
+		{ 
+			get => title; 
+			set => title = value; 
+		}
+		public string Description 
+		{ 
+			get => description; 
+			set => description = value; 
+		}
+		public int Id 
+		{ 
+			get => id; 
+			set => id = value; 
+		}
 	}
 }

@@ -4,14 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CalendarApp.View"
-             xmlns:viewModel="clr-namespace:CalendarApp.ViewModel"
+             xmlns:viewModel="clr-namespace:CalendarApp.ViewModel" xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
         <viewModel:CalendarWeekViewModel/>
     </UserControl.DataContext>
     <Grid>
-        <ItemsControl ItemsSource="{Binding DaysOfCurrentWeek}" Margin="115,95,120,59.6">
+        <ItemsControl x:Name="days_of_week" ItemsSource="{Binding DaysOfCurrentWeek}" Margin="115,90,125,64.6">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Columns="7" />
@@ -19,7 +19,14 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Content="{Binding Date.Day }" />
+                    <Grid Background="{Binding Color}">
+                        <Label Content="{Binding Date.Day}"/>                        
+                        <ItemsControl x:Name="hour_blocks" ItemsSource="{Binding }" Margin="0,20,0,0">                            
+                            <system:String>Item #1</system:String>
+                            <system:String>Item #1</system:String>
+                            <system:String>Item #1</system:String>
+                        </ItemsControl>
+                    </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
@@ -35,12 +42,12 @@
             />
         <Label x:Name="label_monday" Content="Lunes" HorizontalAlignment="Left" Margin="115,45,0,0" VerticalAlignment="Top" Height="45" Width="75"/>
         <Label x:Name="label_tuesday" Content="Martes" HorizontalAlignment="Left" Margin="195,45,0,0" VerticalAlignment="Top" Height="45" Width="75"/>
-        <Label x:Name="label_wednesday" Content="Miercoles" HorizontalAlignment="Left" Margin="275,45,0,0" VerticalAlignment="Top" Height="45" Width="75"/>
-        <Label x:Name="label_thursday" Content="Jueves" HorizontalAlignment="Left" Margin="355,45,0,0" VerticalAlignment="Top" Height="45" Width="75"/>
-        <Label x:Name="label_friday" Content="Viernes" HorizontalAlignment="Left" Margin="430,45,0,0" VerticalAlignment="Top" Height="45" Width="75"/>
-        <Label x:Name="label_saturday" Content="Sabado" HorizontalAlignment="Left" Margin="505,45,0,0" VerticalAlignment="Top" Height="45" Width="75"/>
-        <Label x:Name="label_sunday" Content="Domingo" HorizontalAlignment="Left" Margin="580,45,0,0" VerticalAlignment="Top" Height="45" Width="75" RenderTransformOrigin="4.464,0.56"/>
+        <Label x:Name="label_wednesday" Content="Miércoles" HorizontalAlignment="Left" Margin="275,45,0,0" VerticalAlignment="Top" Height="45" Width="75"/>
+        <Label x:Name="label_thursday" Content="Jueves" HorizontalAlignment="Left" Margin="360,45,0,0" VerticalAlignment="Top" Height="45" Width="75"/>
+        <Label x:Name="label_friday" Content="Viernes" HorizontalAlignment="Left" Margin="435,45,0,0" VerticalAlignment="Top" Height="45" Width="75"/>
+        <Label x:Name="label_saturday" Content="Sabado" HorizontalAlignment="Left" Margin="520,45,0,0" VerticalAlignment="Top" Height="45" Width="75"/>
+        <Label x:Name="label_sunday" Content="Domingo" HorizontalAlignment="Left" Margin="600,45,0,0" VerticalAlignment="Top" Height="45" Width="75" RenderTransformOrigin="4.464,0.56"/>
         <Label x:Name="label_month" Content="{Binding CurrentMonth}" HorizontalAlignment="Left" Margin="315,10,0,0" VerticalAlignment="Top" Height="30" Width="75"/>
-        <Label x:Name="label_year" Content="{Binding CurrentYear}" HorizontalAlignment="Left" Margin="390,10,0,0" VerticalAlignment="Top" Height="30" Width="75"/>
+        <Label x:Name="label_year" Content="{Binding CurrentYear}" HorizontalAlignment="Left" Margin="390,10,0,0" VerticalAlignment="Top" Height="30" Width="75" FontFamily="Roboto" />
     </Grid>
 </UserControl>

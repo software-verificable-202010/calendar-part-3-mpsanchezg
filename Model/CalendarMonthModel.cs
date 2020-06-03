@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace CalendarApp.Model
 {
 	public class CalendarMonthModel
 	{
 		private int monthNumber;
-		private List<DateTime> daysOfMonth;
+		private List<CalendarDayModel> daysOfMonth;
 		private int yearOfMonth;
 
 		public CalendarMonthModel(int monthNumber, int year)
@@ -29,13 +31,11 @@ namespace CalendarApp.Model
 				daysOfMonth = SetDaysOfTheMonth(MonthNumber, YearOfMonth);
 			}
 		}
-
-		public List<DateTime> DaysOfMonth
+		public List<CalendarDayModel> DaysOfMonth
 		{
 			get => daysOfMonth;
 			set => daysOfMonth = value;
 		}
-
 		public int YearOfMonth
 		{
 			get => yearOfMonth;
@@ -45,19 +45,42 @@ namespace CalendarApp.Model
 			}
 		}
 
-
-		private List<DateTime> SetDaysOfTheMonth(int month, int year)
+		private List<CalendarDayModel> SetDaysOfTheMonth(int month, int year)
 		{
-			List<DateTime> newDaysOfMonth = new List<DateTime>();
+			List<CalendarDayModel> newDaysOfMonth = new List<CalendarDayModel>();
 			int firstNumberOfDay = 1;
 			int nDaysInMonth = DateTime.DaysInMonth(year, month);
 
 			for (int dayNumber = firstNumberOfDay; dayNumber <= nDaysInMonth; dayNumber++)
 			{
-				newDaysOfMonth.Add(new DateTime(year, month, dayNumber));
+				DateTime dayToAdd = new DateTime(year, month, dayNumber);
+				AddDayWithMoreProperties(dayToAdd, newDaysOfMonth);
 			}
 
 			return newDaysOfMonth;
+		}
+		private void AddDayWithMoreProperties(DateTime dayToAdd, List<CalendarDayModel> daysOfMonth)
+		{
+			string colorOfDayToAdd = PutColorByDayOfWeek(dayToAdd);
+			CalendarDayModel calendarDay = new CalendarDayModel(dayToAdd, colorOfDayToAdd);
+			daysOfMonth.Add(calendarDay);
+		}
+
+		private string PutColorByDayOfWeek(DateTime day)
+		{
+			if (IsToday(day))
+			{
+				return Constants.ColorOfToday;
+			}
+			else if (day.DayOfWeek != DayOfWeek.Saturday && day.DayOfWeek != DayOfWeek.Sunday)
+			{
+				return Constants.ColorOfWeek;
+			}
+			return Constants.ColorOfWeekend;
+		}
+		private bool IsToday(DateTime date)
+		{
+			return date == DateTime.Today;
 		}
 	}
 }

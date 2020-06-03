@@ -16,7 +16,7 @@
                 <view:CalendarMonthView/>
             </TabItem>
             <TabItem Header="Crear Evento">
-                <view:EventView/>
+                <view:CreateEventView/>
             </TabItem>
         </TabControl>
     </Grid>
