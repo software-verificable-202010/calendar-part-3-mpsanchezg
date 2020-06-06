@@ -23,6 +23,12 @@ namespace CalendarApp.Model
 			set;
 		}
 
+		public DbSet<UserEventModel> UserEvent
+		{
+			get;
+			set;
+		}
+
 		protected override void OnConfiguring(DbContextOptionsBuilder options)
 			=> options.UseSqlite(ConnectionString);
 	}

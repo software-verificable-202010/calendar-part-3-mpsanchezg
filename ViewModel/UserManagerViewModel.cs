@@ -70,7 +70,7 @@ namespace CalendarApp.ViewModel
 			const string messageBoxTitle = "Alerta.";
 			if (IsValidUsername(loginUserName))
 			{
-				CurrentUser = db.Users.Include(u => u.Events).First(u=>u.UserName == LoginUserName);
+				CurrentUser = db.Users.Include(u => u.UserEvents).First(u=>u.UserName == LoginUserName);
 				GoToCalendar();
 				return;
 			}
@@ -81,7 +81,7 @@ namespace CalendarApp.ViewModel
 		private bool IsValidUsername(string username)
 		{
 			var allUsers = db.Users.ToList();
-			for (var userIndex = 0; userIndex < allUsers.Count; userIndex++)
+			for (var userIndex = Constants.FirstElement; userIndex < allUsers.Count; userIndex++)
 			{
 				if (allUsers[userIndex].UserName == username)
 				{

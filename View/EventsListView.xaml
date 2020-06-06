@@ -12,27 +12,26 @@
         <viewModel:EventViewModel/>
     </UserControl.DataContext>
     <Grid>
-        <DataGrid x:Name="eventsDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="150,110,160,139.6" ItemsSource="{Binding UserEvents}" EnableRowVirtualization="True" AutoGenerateColumns="False">
+        <DataGrid x:Name="eventModelDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding CurrentUserEvents}" Margin="210,155,190,94.6" RowDetailsVisibilityMode="VisibleWhenSelected">
             <DataGrid.Columns>
-                <DataGridTextColumn x:Name="descriptionColumn" Width="SizeToHeader" Header="Description" Binding="{Binding Description}"/>
-                <DataGridTemplateColumn x:Name="finishDateAndTimeColumn" Width="SizeToHeader" Header="Finish Date And Time">
+                <DataGridTextColumn x:Name="descriptionColumn" Binding="{Binding Description}" Header="Description" Width="SizeToHeader"/>
+                <DataGridTemplateColumn x:Name="finishDateAndTimeColumn" Header="Finish Date And Time" Width="SizeToHeader">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <DatePicker SelectedDate="{Binding FinishDateAndTime, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn x:Name="idColumn" Width="SizeToHeader" Header="Id" Binding="{Binding Id}"/>
-                <DataGridTemplateColumn x:Name="startDateAndTimeColumn" Width="SizeToHeader" Header="Start Date And Time">
+                <DataGridTextColumn x:Name="idColumn" Binding="{Binding Id}" Header="Id" Width="SizeToHeader"/>
+                <DataGridTemplateColumn x:Name="startDateAndTimeColumn" Header="Start Date And Time" Width="SizeToHeader">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <DatePicker SelectedDate="{Binding StartDateAndTime, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn x:Name="titleColumn" Width="SizeToHeader" Header="Title" Binding="{Binding Title}"/>
+                <DataGridTextColumn x:Name="titleColumn" Binding="{Binding Title}" Header="Title" Width="SizeToHeader"/>
             </DataGrid.Columns>
         </DataGrid>
-
     </Grid>
 </UserControl>

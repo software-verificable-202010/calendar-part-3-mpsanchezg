@@ -14,6 +14,7 @@ namespace CalendarApp.Model
 		private string description;
 		private int id;
 		private UserModel owner;
+		private List<UserEventModel> userEvents;
 
 		public EventModel()
 		{
@@ -27,6 +28,7 @@ namespace CalendarApp.Model
 			FinishDateAndTime = finish;
 			Description = description;
 			Owner = owner;
+			UserEvents = new List<UserEventModel>();
 		}
 
 		public DateTime StartDateAndTime
@@ -58,6 +60,12 @@ namespace CalendarApp.Model
 		{
 			get => owner;
 			set => owner = value;
+		}
+
+		public List<UserEventModel> UserEvents
+		{
+			get => userEvents;
+			set => userEvents = value;
 		}
 	}
 }

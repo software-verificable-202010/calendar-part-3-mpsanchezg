@@ -44,6 +44,27 @@ namespace CalendarApp.Migrations
                     b.ToTable("Events");
                 });
 
+            modelBuilder.Entity("CalendarApp.Model.UserEventModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("EventId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserEvent");
+                });
+
             modelBuilder.Entity("CalendarApp.Model.UserModel", b =>
                 {
                     b.Property<int>("Id")
@@ -61,8 +82,19 @@ namespace CalendarApp.Migrations
             modelBuilder.Entity("CalendarApp.Model.EventModel", b =>
                 {
                     b.HasOne("CalendarApp.Model.UserModel", "Owner")
-                        .WithMany("Events")
+                        .WithMany()
                         .HasForeignKey("OwnerId");
+                });
+
+            modelBuilder.Entity("CalendarApp.Model.UserEventModel", b =>
+                {
+                    b.HasOne("CalendarApp.Model.EventModel", "Event")
+                        .WithMany("UserEvents")
+                        .HasForeignKey("EventId");
+
+                    b.HasOne("CalendarApp.Model.UserModel", "User")
+                        .WithMany("UserEvents")
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

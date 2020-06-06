@@ -37,7 +37,6 @@ namespace CalendarApp.ViewModel
 		}
 		private bool CanCreateUser()
 		{ 
-			// TODO: if username does not exist
 			return true;
 		}
 		private void OnCreateUser()
@@ -56,7 +55,6 @@ namespace CalendarApp.ViewModel
 		private void CreateUser(string username)
 		{
 			UserModel newUser = new UserModel(username);
-			newUser.Events = new List<EventModel>();
 			db.Users.Add(newUser);
 			db.SaveChanges();
 		}

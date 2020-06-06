@@ -35,7 +35,7 @@ namespace CalendarApp.ViewModel
 			FinishDateAndTime = DateTime.Today;
 			// TODO: change the static variable current user
 			CurrentUser = Constants.CurrentUser;
-			UserEvents = Constants.CurrentUser.Events;
+			CurrentUserEvents = GetUserEvents(CurrentUser);
 			CreateEventCommand = new RelayCommand(OnCreateEvent, CanCreateEvent);
 		}
 
@@ -74,7 +74,7 @@ namespace CalendarApp.ViewModel
 				NotifyPropertyChanged(TitleProperty);
 			}
 		}
-		public List<EventModel> UserEvents
+		public List<EventModel> CurrentUserEvents
 		{
 			get => userEvents;
 			set
@@ -110,6 +110,7 @@ namespace CalendarApp.ViewModel
 			if (AreValidData(Title, StartDateAndTime, FinishDateAndTime))
 			{
 				CreateEvent(Title, StartDateAndTime, FinishDateAndTime, Description);
+				CurrentUserEvents = GetUserEvents(CurrentUser);
 				MessageBox.Show(Constants.SuccessfulEvent, CurrentUser.UserName, MessageBoxButton.OK);
 				return;
 			}
@@ -118,21 +119,25 @@ namespace CalendarApp.ViewModel
 
 		private void CreateEvent(string title, DateTime startDateAndTime, DateTime finishDateAndTime, string description)
 		{
-			var newEvent= new EventModel()
-			{
-				Title = title, 
-				StartDateAndTime = startDateAndTime, 
-				FinishDateAndTime = finishDateAndTime, 
-				Description = Description, 
-				Owner = CurrentUser,
-			};
+			var newEvent= new EventModel(CurrentUser, title, startDateAndTime, finishDateAndTime, description);
+			UserEventModel newUserEvents = new UserEventModel(CurrentUser, newEvent);
+			CurrentUser.UserEvents.Add(newUserEvents);
+			newEvent.UserEvents.Add(newUserEvents);
 			db.Add(newEvent);
-			var currentUserCopy = db.Users
-									.Include(u => u.Events)
-									.First(u => u.Id == CurrentUser.Id);
-			currentUserCopy.Events.Add(newEvent);
-			CurrentUser.Events.Add(newEvent);
+			db.Update(CurrentUser);
+			db.Add(newUserEvents);
 			db.SaveChanges();
+		}
+
+		private List<EventModel> GetUserEvents(UserModel user)
+		{
+			List<EventModel> userEvents = new List<EventModel>();
+			int userEventsQuantity = user.UserEvents.Count();
+			for (var eventIndex = Constants.FirstElement; eventIndex < userEventsQuantity; eventIndex++)
+			{
+				userEvents.Add(CurrentUser.UserEvents[eventIndex].Event);
+			}
+			return userEvents;
 		}
 		private bool AreValidData(string title, DateTime startDateAndTime, DateTime finishDateAndTime)
 		{
@@ -155,7 +160,6 @@ namespace CalendarApp.ViewModel
 				}
 			}
 		}
-
 		private void ChildOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
 		{
 			CurrentUser = children.CurrentUser;

@@ -43,14 +43,53 @@ namespace CalendarApp.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserEvent",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserId = table.Column<int>(nullable: true),
+                    EventId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserEvent", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserEvent_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserEvent_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Events_OwnerId",
                 table: "Events",
                 column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserEvent_EventId",
+                table: "UserEvent",
+                column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserEvent_UserId",
+                table: "UserEvent",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "UserEvent");
+
             migrationBuilder.DropTable(
                 name: "Events");
 

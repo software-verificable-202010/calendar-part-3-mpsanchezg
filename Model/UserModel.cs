@@ -10,7 +10,7 @@ namespace CalendarApp.Model
 	{
 		private int id;
 		private string userName;
-		private List<EventModel> events;
+		private List<UserEventModel> userEvents;
 
 		public UserModel()
 		{
@@ -19,6 +19,7 @@ namespace CalendarApp.Model
 		public UserModel(string username)
 		{
 			UserName = username;
+			UserEvents = new List<UserEventModel>();
 		}
 
 		public int Id
@@ -33,10 +34,10 @@ namespace CalendarApp.Model
 			set => userName = value;
 		}
 
-		public List<EventModel> Events
+		public List<UserEventModel> UserEvents
 		{
-			get => events;
-			set => events = value;
+			get => userEvents;
+			set => userEvents = value;
 		}
 	}
 }
