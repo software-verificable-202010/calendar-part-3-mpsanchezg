@@ -17,8 +17,10 @@ namespace CalendarApp.ViewModel
 		private RelayCommand goToNextWeekCommand;
 		private RelayCommand goToLastWeekCommand;
 		private const string currentDayProperty = "CurrentDay";
+		private const string currentMonthProperty = "CurrentMonth";
 		private const string currentCalendarWeekProperty = "CurrentCalendarWeek";
 		private const string daysOfCurrentWeekProperty = "DaysOfCurrentWeek";
+		private const string currentYearProperty = "CurrentYear";
 
 		public CalendarWeekViewModel()
 		{
@@ -63,7 +65,7 @@ namespace CalendarApp.ViewModel
 			set
 			{
 				currentMonth = value;
-				NotifyPropertyChanged("CurrentMonth");
+				NotifyPropertyChanged(currentMonthProperty);
 			}
 		}
 		public int CurrentYear
@@ -72,7 +74,7 @@ namespace CalendarApp.ViewModel
 			set
 			{
 				currentYear = value;
-				NotifyPropertyChanged("CurrentYear");
+				NotifyPropertyChanged(currentYearProperty);
 			}
 		}
 		public RelayCommand GoToNextWeekCommand

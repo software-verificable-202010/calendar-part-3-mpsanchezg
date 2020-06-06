@@ -13,44 +13,51 @@ namespace CalendarApp.Model
 		private string title;
 		private string description;
 		private int id;
+		private UserModel owner;
 
 		public EventModel()
 		{
 
 		}
 
-		public EventModel(string title, DateTime start, DateTime finish, string description)
+		public EventModel(UserModel owner, string title, DateTime start, DateTime finish, string description)
 		{
 			Title = title;
 			StartDateAndTime = start;
 			FinishDateAndTime = finish;
 			Description = description;
+			Owner = owner;
 		}
-		
-		public DateTime StartDateAndTime 
-		{ 
-			get => startDateAndTime; 
-			set => startDateAndTime = value; 
+
+		public DateTime StartDateAndTime
+		{
+			get => startDateAndTime;
+			set => startDateAndTime = value;
 		}
-		public DateTime FinishDateAndTime 
-		{ 
-			get => finishDateAndTime; 
-			set => finishDateAndTime = value; 
+		public DateTime FinishDateAndTime
+		{
+			get => finishDateAndTime;
+			set => finishDateAndTime = value;
 		}
-		public string Title 
-		{ 
-			get => title; 
-			set => title = value; 
+		public string Title
+		{
+			get => title;
+			set => title = value;
 		}
-		public string Description 
-		{ 
-			get => description; 
-			set => description = value; 
+		public string Description
+		{
+			get => description;
+			set => description = value;
 		}
-		public int Id 
-		{ 
-			get => id; 
-			set => id = value; 
+		public int Id
+		{
+			get => id;
+			set => id = value;
+		}
+		public UserModel Owner
+		{
+			get => owner;
+			set => owner = value;
 		}
 	}
 }

@@ -10,11 +10,11 @@ none
 false
 CODE_ANALYSIS;DEBUG;TRACE
 D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Project\CalendarApp\App.xaml
-5448531810
+10-1465538348
 3-1760233159
-2489977294
-162-2011764316
-MainWindow.xaml;View\CalendarMonthView.xaml;View\CalendarView.xaml;View\CalendarWeekView.xaml;View\CreateEventView.xaml;
+35896615242
+162-675185071
+MainWindow.xaml;View\CalendarDayView.xaml;View\CalendarMonthView.xaml;View\CalendarView.xaml;View\CalendarWeekView.xaml;View\CreateEventView.xaml;View\EventsListView.xaml;View\LoginView.xaml;View\SignUpView.xaml;View\UserView.xaml;
 
-False
+True
 

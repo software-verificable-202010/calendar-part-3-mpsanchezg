@@ -7,13 +7,20 @@ using System.Threading.Tasks;
 
 namespace CalendarApp.Model
 {
-	public class EventModelContext : DbContext
+	public class CalendarModelContext : DbContext
 	{
-		private const string ConnectionString = "Data Source=calendar_events.db";
+		private const string ConnectionString = "Data Source=calendar.db";
 
 		public DbSet<EventModel> Events
 		{
-			get; set;
+			get; 
+			set;
+		}
+
+		public DbSet<UserModel> Users
+		{
+			get;
+			set;
 		}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder options)

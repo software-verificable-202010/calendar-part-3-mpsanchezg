@@ -42,10 +42,10 @@ namespace CalendarApp.Model
 			set => daysOfWeek = value;
 		}
 
-		private List<CalendarDayModel> GetCalendarDaysOfWeek(DateTime selectedDateOfWeek)
+		private List<CalendarDayModel> GetCalendarDaysOfWeek(DateTime dateOfWeek)
 		{
 			List<CalendarDayModel> calendarDaysOfWeek = new List<CalendarDayModel>();
-			List<DateTime> daysOfWeek = GetDaysOfWeekBySelectedDay(selectedDateOfWeek);
+			List<DateTime> daysOfWeek = GetDaysOfWeekBySelectedDay(dateOfWeek);
 			for (int dayOfWeekIndex = Constants.FirstElement; dayOfWeekIndex < Constants.DaysOfAWeek; dayOfWeekIndex++)
 			{
 				string colorOfCalendarDay = PutColorOfCalendarDayOfWeek(daysOfWeek[dayOfWeekIndex]);

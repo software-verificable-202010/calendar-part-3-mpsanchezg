@@ -7,8 +7,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CalendarApp.Migrations
 {
-    [DbContext(typeof(EventModelContext))]
-    partial class EventModelContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(CalendarModelContext))]
+    partial class CalendarModelContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -28,6 +28,9 @@ namespace CalendarApp.Migrations
                     b.Property<DateTime>("FinishDateAndTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("OwnerId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("StartDateAndTime")
                         .HasColumnType("TEXT");
 
@@ -36,7 +39,30 @@ namespace CalendarApp.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OwnerId");
+
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("CalendarApp.Model.UserModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("CalendarApp.Model.EventModel", b =>
+                {
+                    b.HasOne("CalendarApp.Model.UserModel", "Owner")
+                        .WithMany("Events")
+                        .HasForeignKey("OwnerId");
                 });
 #pragma warning restore 612, 618
         }

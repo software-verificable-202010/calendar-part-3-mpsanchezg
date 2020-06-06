@@ -39,7 +39,10 @@ namespace CalendarApp.Model
         public static readonly string ColorOfDaysOfOtherMonth = "#FFD7F3F3";
         public static readonly string SuccessfulEvent = "¡Evento creado con éxito!";
         public static readonly string FailedEvent = "Error. Revise que el evento tenga título y que las fechas sean correctas.";
-
-
+        public static readonly string SuccessfulUser = "¡Usuario creado con éxito!";
+        public static readonly string FailedUser = "El nombre de usuario ya existe. Por favor, intente con otro nombre.";
+        public static readonly string FailedLogin = "Nombre de usuario inválido.";
+        public static readonly string MainWindow = "MainWindow";
+        public static UserModel CurrentUser;
 	}
 }

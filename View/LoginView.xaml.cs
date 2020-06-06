@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace CalendarApp.View
 {
 	/// <summary>
-	/// Lógica de interacción para CalendarView.xaml
+	/// Lógica de interacción para LoginView.xaml
 	/// </summary>
-	public partial class CalendarView : Window
+	public partial class LoginView : UserControl
 	{
-		public CalendarView()
+		public LoginView()
 		{
 			InitializeComponent();
 		}

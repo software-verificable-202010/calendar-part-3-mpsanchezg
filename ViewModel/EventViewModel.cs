@@ -8,26 +8,34 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.EntityFrameworkCore;
 
 namespace CalendarApp.ViewModel
 {
-	public class EventViewModel : INotifyPropertyChanged
+	public class EventViewModel : ViewModelBase
 	{
 		private string title;
 		private string description;
 		private DateTime startDateAndTime;
 		private DateTime finishDateAndTime;
-		private const string finishDateAndTimeProperty = "FinishDateAndTime";
-		private const string startDateAndTimeProperty = "StartDateAndTime";
-		private const string descriptionProperty = "Description";
-		private const string titleProperty = "Title";
-		public EventModelContext db;
+		private UserModel currentUser;
+		private List<EventModel> userEvents;
+		private const string FinishDateAndTimeProperty = "FinishDateAndTime";
+		private const string StartDateAndTimeProperty = "StartDateAndTime";
+		private const string DescriptionProperty = "Description";
+		private const string TitleProperty = "Title";
+		private const string CurrentUserProperty = "CurrentUser";
+		private const string UserEventsProperty = "UserEvents";
+		private CalendarModelContext db;
 
 		public EventViewModel()
 		{
-			db = new EventModelContext();
+			db = new CalendarModelContext();
 			StartDateAndTime = DateTime.Today;
 			FinishDateAndTime = DateTime.Today;
+			// TODO: change the static variable current user
+			CurrentUser = Constants.CurrentUser;
+			UserEvents = Constants.CurrentUser.Events;
 			CreateEventCommand = new RelayCommand(OnCreateEvent, CanCreateEvent);
 		}
 
@@ -37,7 +45,7 @@ namespace CalendarApp.ViewModel
 			set 
 			{ 
 				finishDateAndTime = value; 
-				NotifyPropertyChanged(finishDateAndTimeProperty); 
+				NotifyPropertyChanged(FinishDateAndTimeProperty); 
 			} 
 		}
 		public DateTime StartDateAndTime 
@@ -45,7 +53,7 @@ namespace CalendarApp.ViewModel
 			get => startDateAndTime; 
 			set{ 
 				startDateAndTime = value; 
-				NotifyPropertyChanged(startDateAndTimeProperty); 
+				NotifyPropertyChanged(StartDateAndTimeProperty); 
 			} 
 		}
 		public string Description 
@@ -54,7 +62,7 @@ namespace CalendarApp.ViewModel
 			set
 			{
 				description = value;
-				NotifyPropertyChanged(descriptionProperty);
+				NotifyPropertyChanged(DescriptionProperty);
 			}
 		}
 		public string Title 
@@ -63,12 +71,35 @@ namespace CalendarApp.ViewModel
 			set
 			{
 				title = value;
-				NotifyPropertyChanged(titleProperty);
+				NotifyPropertyChanged(TitleProperty);
+			}
+		}
+		public List<EventModel> UserEvents
+		{
+			get => userEvents;
+			set
+			{
+				userEvents = value;
+				NotifyPropertyChanged(UserEventsProperty);
+			}
+		}
+		public UserModel CurrentUser
+		{
+			get => currentUser;
+			set
+			{
+				if (value != currentUser)
+				{
+					currentUser = value;
+					NotifyPropertyChanged(CurrentUserProperty);
+				}
 			}
 		}
 
-		
-		public RelayCommand CreateEventCommand { get; }
+		public RelayCommand CreateEventCommand
+		{
+			get;
+		}
 		private bool CanCreateEvent()
 		{
 			return true;
@@ -79,7 +110,7 @@ namespace CalendarApp.ViewModel
 			if (AreValidData(Title, StartDateAndTime, FinishDateAndTime))
 			{
 				CreateEvent(Title, StartDateAndTime, FinishDateAndTime, Description);
-				MessageBox.Show(Constants.SuccessfulEvent, messageBoxTitle, MessageBoxButton.OK);
+				MessageBox.Show(Constants.SuccessfulEvent, CurrentUser.UserName, MessageBoxButton.OK);
 				return;
 			}
 			MessageBox.Show(Constants.FailedEvent, messageBoxTitle, MessageBoxButton.OK);
@@ -87,8 +118,20 @@ namespace CalendarApp.ViewModel
 
 		private void CreateEvent(string title, DateTime startDateAndTime, DateTime finishDateAndTime, string description)
 		{
-			EventModel eventModel = new EventModel(title, startDateAndTime, finishDateAndTime, description);
-			db.Add(eventModel);
+			var newEvent= new EventModel()
+			{
+				Title = title, 
+				StartDateAndTime = startDateAndTime, 
+				FinishDateAndTime = finishDateAndTime, 
+				Description = Description, 
+				Owner = CurrentUser,
+			};
+			db.Add(newEvent);
+			var currentUserCopy = db.Users
+									.Include(u => u.Events)
+									.First(u => u.Id == CurrentUser.Id);
+			currentUserCopy.Events.Add(newEvent);
+			CurrentUser.Events.Add(newEvent);
 			db.SaveChanges();
 		}
 		private bool AreValidData(string title, DateTime startDateAndTime, DateTime finishDateAndTime)
@@ -96,19 +139,26 @@ namespace CalendarApp.ViewModel
 			return startDateAndTime < finishDateAndTime && title != null;
 		}
 
-		public event PropertyChangedEventHandler PropertyChanged;
-		private void NotifyPropertyChanged(String propertyName)
+		// TODO: hacer que los usuarios puedan invitar a otros
+
+		private UserManagerViewModel _children;
+		public UserManagerViewModel children
 		{
-			PropertyChangedEventHandler handler = PropertyChanged;
-			if (null != handler)
+			get { return _children; }
+			set
 			{
-				PropertyChangedDelegate(propertyName, handler);
+				if (value != _children)
+				{
+					_children = value;
+					PropertyChanged += ChildOnPropertyChanged;
+					NotifyPropertyChanged("children");
+				}
 			}
 		}
 
-		private void PropertyChangedDelegate(string propertyName, PropertyChangedEventHandler handler)
+		private void ChildOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
 		{
-			handler(this, new PropertyChangedEventArgs(propertyName));
+			CurrentUser = children.CurrentUser;
 		}
 	}
 }

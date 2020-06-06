@@ -59,11 +59,11 @@ namespace CalendarApp.Model
 
 			return newDaysOfMonth;
 		}
-		private void AddDayWithMoreProperties(DateTime dayToAdd, List<CalendarDayModel> daysOfMonth)
+		private void AddDayWithMoreProperties(DateTime dayToAdd, List<CalendarDayModel> calendarDaysOfMonth)
 		{
 			string colorOfDayToAdd = PutColorByDayOfWeek(dayToAdd);
 			CalendarDayModel calendarDay = new CalendarDayModel(dayToAdd, colorOfDayToAdd);
-			daysOfMonth.Add(calendarDay);
+			calendarDaysOfMonth.Add(calendarDay);
 		}
 
 		private string PutColorByDayOfWeek(DateTime day)
