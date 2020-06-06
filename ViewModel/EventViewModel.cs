@@ -37,27 +37,30 @@ namespace CalendarApp.ViewModel
 			CurrentUser = Constants.CurrentUser;
 			CurrentUserEvents = GetUserEvents(CurrentUser);
 			CreateEventCommand = new RelayCommand(OnCreateEvent, CanCreateEvent);
+			EditEventCommand = new RelayCommand(OnEditEvent, CanEditEvent);
+			DeleteEventCommand = new RelayCommand(OnDeleteEvent, CanDeleteEvent);
 		}
 
-		public DateTime FinishDateAndTime 
-		{ 
-			get => finishDateAndTime; 
-			set 
-			{ 
-				finishDateAndTime = value; 
-				NotifyPropertyChanged(FinishDateAndTimeProperty); 
-			} 
+		public DateTime FinishDateAndTime
+		{
+			get => finishDateAndTime;
+			set
+			{
+				finishDateAndTime = value;
+				NotifyPropertyChanged(FinishDateAndTimeProperty);
+			}
 		}
-		public DateTime StartDateAndTime 
-		{ 
-			get => startDateAndTime; 
-			set{ 
-				startDateAndTime = value; 
-				NotifyPropertyChanged(StartDateAndTimeProperty); 
-			} 
+		public DateTime StartDateAndTime
+		{
+			get => startDateAndTime;
+			set
+			{
+				startDateAndTime = value;
+				NotifyPropertyChanged(StartDateAndTimeProperty);
+			}
 		}
-		public string Description 
-		{ 
+		public string Description
+		{
 			get => description;
 			set
 			{
@@ -65,9 +68,9 @@ namespace CalendarApp.ViewModel
 				NotifyPropertyChanged(DescriptionProperty);
 			}
 		}
-		public string Title 
-		{ 
-			get => title; 
+		public string Title
+		{
+			get => title;
 			set
 			{
 				title = value;
@@ -100,6 +103,16 @@ namespace CalendarApp.ViewModel
 		{
 			get;
 		}
+		public RelayCommand EditEventCommand
+		{
+			get;
+		}
+		public RelayCommand DeleteEventCommand
+		{
+			get;
+		}
+
+
 		private bool CanCreateEvent()
 		{
 			return true;
@@ -114,20 +127,47 @@ namespace CalendarApp.ViewModel
 				MessageBox.Show(Constants.SuccessfulEvent, CurrentUser.UserName, MessageBoxButton.OK);
 				return;
 			}
+
 			MessageBox.Show(Constants.FailedEvent, messageBoxTitle, MessageBoxButton.OK);
 		}
-
 		private void CreateEvent(string title, DateTime startDateAndTime, DateTime finishDateAndTime, string description)
 		{
-			var newEvent= new EventModel(CurrentUser, title, startDateAndTime, finishDateAndTime, description);
-			UserEventModel newUserEvents = new UserEventModel(CurrentUser, newEvent);
-			CurrentUser.UserEvents.Add(newUserEvents);
-			newEvent.UserEvents.Add(newUserEvents);
-			db.Add(newEvent);
-			db.Update(CurrentUser);
+			UserModel currentUserCopy = db.Users.Include(u => u.UserEvents).ThenInclude(ue => ue.Event)
+				.First(u => u.UserName == CurrentUser.UserName);
+			var newEvent = new EventModel(currentUserCopy, title, startDateAndTime, finishDateAndTime, description);
+			UserEventModel newUserEvents = new UserEventModel(currentUserCopy, newEvent);
 			db.Add(newUserEvents);
 			db.SaveChanges();
+			CurrentUser = currentUserCopy;
 		}
+
+
+		private bool CanEditEvent()
+		{
+			return true;
+		}
+		private void OnEditEvent()
+		{
+
+		}
+		private void EditEvent()
+		{
+
+		}
+
+		private bool CanDeleteEvent()
+		{
+			return true;
+		}
+		private void OnDeleteEvent()
+		{
+
+		}
+		private void DeleteEvent()
+		{
+
+		}
+
 
 		private List<EventModel> GetUserEvents(UserModel user)
 		{

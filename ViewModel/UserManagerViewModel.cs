@@ -70,7 +70,7 @@ namespace CalendarApp.ViewModel
 			const string messageBoxTitle = "Alerta.";
 			if (IsValidUsername(loginUserName))
 			{
-				CurrentUser = db.Users.Include(u => u.UserEvents).First(u=>u.UserName == LoginUserName);
+				CurrentUser = db.Users.Include(u => u.UserEvents).ThenInclude(ue => ue.Event).First(u=>u.UserName == LoginUserName);
 				GoToCalendar();
 				return;
 			}
