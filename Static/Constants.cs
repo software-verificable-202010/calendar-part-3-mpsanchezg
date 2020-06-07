@@ -38,12 +38,17 @@ namespace CalendarApp.Model
         public static readonly string ColorOfToday = "#FF00CED1";
         public static readonly string ColorOfDaysOfOtherMonth = "#FFD7F3F3";
         public static readonly string SuccessfulEvent = "¡Evento creado con éxito!";
+        public static readonly string SuccessfulEditEvent = "¡Evento editado con éxito!";
         public static readonly string FailedEvent = "Error. Revise que el evento tenga título y que las fechas sean correctas.";
         public static readonly string SuccessfulUser = "¡Usuario creado con éxito!";
         public static readonly string FailedUser = "El nombre de usuario ya existe. Por favor, intente con otro nombre.";
         public static readonly string FailedLogin = "Nombre de usuario inválido.";
         public static readonly string MainWindow = "MainWindow";
-        public static readonly string NotOwnerEventMessage = "No puedes editar un evento que no es tuyo.";
+        public static readonly string NotOwnerEditEvent = "¡Ups!...No puedes editar un evento que no es tuyo.";
+        public static readonly string NotOwnerDeleteEvent = "¡Ups!...No puedes eliminar este evento.";
+        public static readonly string FailedEditEvent = "Error. Revise que el evento tenga título y que las fechas sean correctas.";
+        public static readonly string InvalidInvited = "El invitado debe ser válido.";
+        public static readonly string InvitedAdded = "Invitado agregado al evento.";
         public static UserModel CurrentUser;
 	}
 }

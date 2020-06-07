@@ -223,6 +223,9 @@ namespace CalendarApp.ViewModel
 			db.SaveChanges();
 			InviteOtherUsers(newEvent);
 			CurrentUser = currentUserCopy;
+			CurrentUserEvents.Add(newEvent);
+			CurrentUserEventsCollection.Add(newEvent);
+
 		}
 		private void InviteOtherUsers(EventModel eventModel)
 		{
@@ -247,11 +250,19 @@ namespace CalendarApp.ViewModel
 		}
 		private void OnInviteUsers()
 		{
-			UserModel invited = db.Users.First(u=>u.UserName==invitedUser);
+			string messageBoxTitle = "Agregar Invitado.";
+			if (InvitedUser == null)
+			{
+				MessageBox.Show(Constants.InvalidInvited, messageBoxTitle, MessageBoxButton.OK);
+				return;
+			}
+			var invited = db.Users.First(u=>u.UserName==InvitedUser);
 			if (!InvitedUsers.Contains(invited))
 			{
 				InvitedUsers.Add(invited);
 			}
+
+			MessageBox.Show(Constants.InvitedAdded, messageBoxTitle, MessageBoxButton.OK);
 		}
 
 		private bool CanEditEvent()
@@ -263,27 +274,27 @@ namespace CalendarApp.ViewModel
 			string messageBoxTitle = "Editar Evento.";
 			if (!CurrentUserIsOwner())
 			{
-				MessageBox.Show(Constants.NotOwnerEventMessage, messageBoxTitle, MessageBoxButton.OK);
+				MessageBox.Show(Constants.NotOwnerEditEvent, messageBoxTitle, MessageBoxButton.OK);
 				return;
 			}
 			if (AreValidData(CustomEvent.Title, CustomEvent.StartDateAndTime, CustomEvent.FinishDateAndTime))
 			{
 				db.Events.Update(CustomEvent);
 				db.SaveChanges();
-				MessageBox.Show(Constants.SuccessfulEvent, messageBoxTitle, MessageBoxButton.OK);
+				MessageBox.Show(Constants.SuccessfulEditEvent, messageBoxTitle, MessageBoxButton.OK);
 				return;
 			}
-			MessageBox.Show(Constants.FailedEvent, messageBoxTitle, MessageBoxButton.OK);
+			MessageBox.Show(Constants.FailedEditEvent, messageBoxTitle, MessageBoxButton.OK);
 			return;
 		}
 		
-
 		private bool CanDeleteEvent()
 		{
 			return true;
 		}
 		private void OnDeleteEvent()
 		{
+			string messageBoxTitle = "Eliminar Evento.";
 			if (CurrentUserIsOwner())
 			{
 				CurrentUserEvents.Remove(CustomEvent);
@@ -292,6 +303,8 @@ namespace CalendarApp.ViewModel
 				db.RemoveRange(eventToDelete);
 				db.SaveChanges();
 			}
+
+			MessageBox.Show(Constants.NotOwnerDeleteEvent, messageBoxTitle, MessageBoxButton.OK);
 		}
 
 		private bool CurrentUserIsOwner()
