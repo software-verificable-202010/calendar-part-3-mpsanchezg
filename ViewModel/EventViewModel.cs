@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Security.Cryptography;
@@ -19,13 +20,19 @@ namespace CalendarApp.ViewModel
 		private DateTime startDateAndTime;
 		private DateTime finishDateAndTime;
 		private UserModel currentUser;
+		private string invitedUser;
 		private List<EventModel> userEvents;
+		private ObservableCollection<UserModel> allUsers;
+		private ObservableCollection<UserModel> invitedUsers;
 		private const string FinishDateAndTimeProperty = "FinishDateAndTime";
 		private const string StartDateAndTimeProperty = "StartDateAndTime";
 		private const string DescriptionProperty = "Description";
 		private const string TitleProperty = "Title";
 		private const string CurrentUserProperty = "CurrentUser";
 		private const string UserEventsProperty = "UserEvents";
+		private const string InvitedUsersProperty = "InvitedUsers";
+		private const string AllUserEventsProperty = "AllUserEvents";
+		private const string InvitedUserProperty = "InvitedUser";
 		private CalendarModelContext db;
 
 		public EventViewModel()
@@ -36,9 +43,10 @@ namespace CalendarApp.ViewModel
 			// TODO: change the static variable current user
 			CurrentUser = Constants.CurrentUser;
 			CurrentUserEvents = GetUserEvents(CurrentUser);
+			AllUsers = new ObservableCollection<UserModel>(GetAllUsers());
+			InvitedUsers = new ObservableCollection<UserModel>();
 			CreateEventCommand = new RelayCommand(OnCreateEvent, CanCreateEvent);
-			EditEventCommand = new RelayCommand(OnEditEvent, CanEditEvent);
-			DeleteEventCommand = new RelayCommand(OnDeleteEvent, CanDeleteEvent);
+			AddInvitedUsersCommand = new RelayCommand(OnInviteUsers, CanInviteUsers);
 		}
 
 		public DateTime FinishDateAndTime
@@ -98,16 +106,42 @@ namespace CalendarApp.ViewModel
 				}
 			}
 		}
+		public string InvitedUser
+		{
+			get => invitedUser;
+			set
+			{
+				if (value != invitedUser)
+				{
+					invitedUser = value;
+					NotifyPropertyChanged(InvitedUserProperty);
+				}
+			}
+		}
+		public ObservableCollection<UserModel> AllUsers
+		{
+			get => allUsers;
+			set
+			{
+				allUsers = value;
+				NotifyPropertyChanged(AllUserEventsProperty);
+			}
+		}
+		public ObservableCollection<UserModel> InvitedUsers
+		{
+			get => invitedUsers;
+			set
+			{
+				invitedUsers = value;
+				NotifyPropertyChanged(InvitedUsersProperty);
+			}
+		}
 
 		public RelayCommand CreateEventCommand
 		{
 			get;
-		}
-		public RelayCommand EditEventCommand
-		{
-			get;
-		}
-		public RelayCommand DeleteEventCommand
+		} 
+		public RelayCommand AddInvitedUsersCommand
 		{
 			get;
 		}
@@ -138,37 +172,53 @@ namespace CalendarApp.ViewModel
 			UserEventModel newUserEvents = new UserEventModel(currentUserCopy, newEvent);
 			db.Add(newUserEvents);
 			db.SaveChanges();
+			InviteOtherUsers(newEvent);
 			CurrentUser = currentUserCopy;
 		}
+		private void InviteOtherUsers(EventModel eventModel)
+		{
+			if (InvitedUsers.Count > 0)
+			{
+				foreach (var invitedUser in InvitedUsers)
+				{
+					UserModel invitedUserCopy = db.Users.Include(u => u.UserEvents).ThenInclude(ue => ue.Event)
+						.First(u => u.UserName == invitedUser.UserName);
+					var newEvent = eventModel;
+					UserEventModel newUserEvents = new UserEventModel(invitedUserCopy, newEvent);
+					db.Add(newUserEvents);
+					db.SaveChanges();
 
+				}
+			}
+		}
 
-		private bool CanEditEvent()
+		private bool CanInviteUsers()
 		{
 			return true;
 		}
-		private void OnEditEvent()
+		private void OnInviteUsers()
 		{
-
-		}
-		private void EditEvent()
-		{
-
-		}
-
-		private bool CanDeleteEvent()
-		{
-			return true;
-		}
-		private void OnDeleteEvent()
-		{
-
-		}
-		private void DeleteEvent()
-		{
-
+			UserModel invited = db.Users.First(u=>u.UserName==invitedUser);
+			if (!InvitedUsers.Contains(invited))
+			{
+				InvitedUsers.Add(invited);
+			}
 		}
 
 
+
+		private List<UserModel> GetAllUsers()
+		{
+			List<UserModel> users = new List<UserModel>();
+			foreach (var user in db.Users.ToList())
+			{
+				if (user.UserName != CurrentUser.UserName)
+				{
+					users.Add(user);
+				}
+			}
+			return users;
+		}
 		private List<EventModel> GetUserEvents(UserModel user)
 		{
 			List<EventModel> userEvents = new List<EventModel>();
