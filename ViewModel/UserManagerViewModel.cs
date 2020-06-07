@@ -16,11 +16,13 @@ namespace CalendarApp.ViewModel
 {
 	public class UserManagerViewModel : ViewModelBase
 	{
+		#region Private Variables
 		private CalendarModelContext db;
 		private UserModel currentUser;
 		private string loginUserName;
 		private const string UserNameProperty = "LoginUserName";
 		private const string CurrentUserProperty = "CurrentUser";
+		#endregion
 
 
 		public UserManagerViewModel()
@@ -29,6 +31,7 @@ namespace CalendarApp.ViewModel
 			LoginCommand = new RelayCommand(OnLogin, CanLogin);
 		}
 
+		#region Properties
 		public UserModel CurrentUser
 		{
 			get => currentUser;
@@ -44,7 +47,6 @@ namespace CalendarApp.ViewModel
 				
 			}
 		}
-
 		public string LoginUserName
 		{
 			get => loginUserName;
@@ -54,17 +56,17 @@ namespace CalendarApp.ViewModel
 				NotifyPropertyChanged(UserNameProperty);
 			}
 		}
-
 		public RelayCommand LoginCommand
 		{
 			get;
 		}
+		#endregion
 
+		#region Private Methods
 		private bool CanLogin()
 		{
 			return true;
 		}
-
 		private void OnLogin()
 		{
 			const string messageBoxTitle = "Alerta.";
@@ -73,14 +75,13 @@ namespace CalendarApp.ViewModel
 				CurrentUser = db.Users
 					.Include(u => u.UserEvents)
 					.ThenInclude(ue => ue.Event)
-					.First(u=>u.UserName == LoginUserName);
+					.First(u => u.UserName == LoginUserName);
 				GoToCalendar();
 				return;
 			}
 			MessageBox.Show(Constants.FailedLogin, messageBoxTitle, MessageBoxButton.OK);
 			return;
 		}
-
 		private bool IsValidUsername(string username)
 		{
 			var allUsers = db.Users.ToList();
@@ -107,7 +108,7 @@ namespace CalendarApp.ViewModel
 			}
 		}
 
+		#endregion
 		
-
 	}
 }

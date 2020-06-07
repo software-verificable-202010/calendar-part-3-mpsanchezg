@@ -13,15 +13,19 @@ namespace CalendarApp.ViewModel
 {
 	class SignUpViewModel : INotifyPropertyChanged
 	{
+		#region Private Variables
 		private string userName;
 		private readonly CalendarModelContext db;
 		private const string UserNameProperty = "UserName";
+		#endregion
+
 		public SignUpViewModel()
 		{
 			db = new CalendarModelContext();
 			CreateUserCommand = new RelayCommand(OnCreateUser, CanCreateUser);
 		}
 
+		#region Properties
 		public string UserName
 		{
 			get => userName;
@@ -35,6 +39,9 @@ namespace CalendarApp.ViewModel
 		{
 			get;
 		}
+		#endregion
+
+		#region Private Methods
 		private bool CanCreateUser()
 		{ 
 			return true;
@@ -58,7 +65,6 @@ namespace CalendarApp.ViewModel
 			db.Users.Add(newUser);
 			db.SaveChanges();
 		}
-
 		private bool IsValidUsername(string username)
 		{
 			var dbUsers = db.Users;
@@ -76,7 +82,7 @@ namespace CalendarApp.ViewModel
 			return true;
 		}
 		
-		public event PropertyChangedEventHandler PropertyChanged;
+		
 		private void NotifyPropertyChanged(String propertyName)
 		{
 			PropertyChangedEventHandler handler = PropertyChanged;
@@ -85,12 +91,17 @@ namespace CalendarApp.ViewModel
 				PropertyChangedDelegate(propertyName, handler);
 			}
 		}
-
 		private void PropertyChangedDelegate(string propertyName, PropertyChangedEventHandler handler)
 		{
 			handler(this, new PropertyChangedEventArgs(propertyName));
 		}
+		#endregion
 
+		#region Events
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		#endregion
 
 	}
 }

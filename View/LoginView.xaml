@@ -31,7 +31,7 @@
                 Background="#FF007889" BorderBrush="#FF014B5D" Foreground="White" RenderTransformOrigin="0.707,0.5"
             />
         </Grid>
-        <Label Content="Best Calendario Ever" FontFamily="Microsoft YaHei" FontSize="48" Margin="190,60,40,79.6"></Label>
+        <Label Content="Best Calendario Ever" FontFamily="Microsoft YaHei" FontSize="48" Margin="190,60,40,229.6"></Label>
         
     </Grid>
 </UserControl>

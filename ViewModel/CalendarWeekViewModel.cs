@@ -9,6 +9,8 @@ namespace CalendarApp.ViewModel
 {
 	public class CalendarWeekViewModel : INotifyPropertyChanged
 	{
+		#region Private Variables
+
 		private DateTime currentDay;
 		private List<CalendarDayModel> daysOfCurrentWeek;
 		private string currentMonth;
@@ -22,6 +24,8 @@ namespace CalendarApp.ViewModel
 		private const string daysOfCurrentWeekProperty = "DaysOfCurrentWeek";
 		private const string currentYearProperty = "CurrentYear";
 
+		#endregion
+
 		public CalendarWeekViewModel()
 		{
 			CurrentDay = DateTime.Today;
@@ -30,6 +34,8 @@ namespace CalendarApp.ViewModel
 			GoToNextWeekCommand = new RelayCommand(OnGoToNextWeek, CanGoToNextWeek);
 			GoToLastWeekCommand = new RelayCommand(OnGoToLastWeek, CanGoToLastWeek);
 		}
+
+		#region Properties
 
 		public DateTime CurrentDay 
 		{ 
@@ -88,6 +94,9 @@ namespace CalendarApp.ViewModel
 			set => goToLastWeekCommand = value;
 		}
 
+		#endregion
+
+		#region Private Methods
 		private bool CanGoToNextWeek()
 		{
 			return true;
@@ -107,8 +116,7 @@ namespace CalendarApp.ViewModel
 			CurrentDay = CurrentDay.AddDays(-Constants.DaysOfAWeek);
 			DaysOfCurrentWeek = GetCalendarDaysOfWeek(CurrentDay);
 		}
-
-
+		
 		private List<CalendarDayModel> GetCalendarDaysOfWeek(DateTime day)
 		{
 			List<CalendarDayModel> calendarDaysOfWeek = new List<CalendarDayModel>();
@@ -146,7 +154,7 @@ namespace CalendarApp.ViewModel
 			daysOfWeekBySelectedDay = Enumerable.Range(
 				Constants.StartDayNumber,
 				Constants.DaysOfAWeek
-				).Select(days => monday.AddDays(days)).ToList();
+			).Select(days => monday.AddDays(days)).ToList();
 
 			return daysOfWeekBySelectedDay;
 		}
@@ -170,7 +178,6 @@ namespace CalendarApp.ViewModel
 			CurrentYear = DaysOfCurrentWeek[Constants.Thursday - Constants.OneDay].Date.Year;
 		}
 
-		public event PropertyChangedEventHandler PropertyChanged;
 		private void NotifyPropertyChanged(String propertyName)
 		{
 			PropertyChangedEventHandler handler = PropertyChanged;
@@ -183,5 +190,12 @@ namespace CalendarApp.ViewModel
 		{
 			handler(this, new PropertyChangedEventArgs(propertyName));
 		}
+		#endregion
+
+		#region Events
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		#endregion
 	}
 }

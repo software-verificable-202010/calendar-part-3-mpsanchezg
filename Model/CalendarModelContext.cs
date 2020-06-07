@@ -16,13 +16,11 @@ namespace CalendarApp.Model
 			get; 
 			set;
 		}
-
 		public DbSet<UserModel> Users
 		{
 			get;
 			set;
 		}
-
 		public DbSet<UserEventModel> UserEvent
 		{
 			get;

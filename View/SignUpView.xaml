@@ -31,7 +31,7 @@
                 Margin="355,285,296.6,127.8" FontFamily="Microsoft YaHei UI" FontSize="20" 
                 Background="#FF007889" BorderBrush="#FF014B5D" Foreground="White" 
                 />
-            <Label Content="Best Calendario Ever" FontFamily="Microsoft YaHei" FontSize="48" Margin="85,65,60,64.8"/>
+            <Label Content="Best Calendario Ever" FontFamily="Microsoft YaHei" FontSize="48" Margin="85,65,60,242.8"/>
         </Grid>
     </Grid>
 </UserControl>

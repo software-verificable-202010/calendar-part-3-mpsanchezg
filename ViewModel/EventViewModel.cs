@@ -62,7 +62,6 @@ namespace CalendarApp.ViewModel
 		}
 
 		#region Properties
-
 		public DateTime FinishDateAndTime
 		{
 			get => finishDateAndTime;
@@ -194,9 +193,9 @@ namespace CalendarApp.ViewModel
 		{
 			get;
 		}
-
 		#endregion
 
+		#region Private Methods
 		private bool CanCreateEvent()
 		{
 			return true;
@@ -257,7 +256,7 @@ namespace CalendarApp.ViewModel
 				MessageBox.Show(Constants.InvalidInvited, messageBoxTitle, MessageBoxButton.OK);
 				return;
 			}
-			var invited = db.Users.First(u=>u.UserName==InvitedUser);
+			var invited = db.Users.First(u => u.UserName == InvitedUser);
 			if (!InvitedUsers.Contains(invited))
 			{
 				InvitedUsers.Add(invited);
@@ -278,7 +277,7 @@ namespace CalendarApp.ViewModel
 				MessageBox.Show(Constants.DeletedEvent, messageBoxTitle, MessageBoxButton.OK);
 				return;
 			}
-			
+
 			if (!CurrentUserIsOwner())
 			{
 				MessageBox.Show(Constants.NotOwnerEditEvent, messageBoxTitle, MessageBoxButton.OK);
@@ -294,7 +293,7 @@ namespace CalendarApp.ViewModel
 			MessageBox.Show(Constants.FailedEditEvent, messageBoxTitle, MessageBoxButton.OK);
 			return;
 		}
-		
+
 		private bool CanDeleteEvent()
 		{
 			return true;
@@ -324,7 +323,7 @@ namespace CalendarApp.ViewModel
 		private bool EventCanBeDeleted()
 		{
 			var eventToDelete = db.Events.FirstOrDefault(e => e.Id == CustomEventId);
-			return CurrentUserIsOwner() && EventsListContainsCustomEvent() && eventToDelete!=null;
+			return CurrentUserIsOwner() && EventsListContainsCustomEvent() && eventToDelete != null;
 		}
 		private bool CurrentUserIsOwner()
 		{
@@ -336,14 +335,12 @@ namespace CalendarApp.ViewModel
 			{
 				if (eventModel.Id == CustomEventId)
 				{
-					return true; 
+					return true;
 				}
 			}
 
 			return false;
 		}
-
-
 
 		private List<UserModel> GetAllUsers()
 		{
@@ -387,6 +384,7 @@ namespace CalendarApp.ViewModel
 
 			return null;
 		}
+		#endregion
 
 	}
 }

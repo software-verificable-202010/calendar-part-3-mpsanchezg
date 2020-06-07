@@ -14,6 +14,7 @@ namespace CalendarApp.ViewModel
 {
 	public class CalendarMonthViewModel : INotifyPropertyChanged
 	{
+		#region Private Variables
 		private DateTime currentDate;
 		private int currentMonth;
 		private string currentMonthName;
@@ -22,11 +23,12 @@ namespace CalendarApp.ViewModel
 		private List<CalendarDayModel> daysOfCurrentMonth;
 		private RelayCommand goToLastMonthCommand;
 		private RelayCommand goToNextMonthCommand;
-		private const string daysOfCurrentMonthProp = "DaysOfCurrentMonth";
-		private const string currrentMonthProp = "CurrentYear";
-		private const string currentMonthNameProp = "CurrentMonthName";
-		private const string currentYearProp = "CurrentYear";
-		private const string currentCalendarMonthProp = "CurrentCalendarMonth";
+		private const string DaysOfCurrentMonthProperty = "DaysOfCurrentMonth";
+		private const string CurrrentMonthProperty = "CurrentYear";
+		private const string CurrentMonthNameProperty = "CurrentMonthName";
+		private const string CurrentYearProperty = "CurrentYear";
+		private const string CurrentCalendarMonthProperty = "CurrentCalendarMonth";
+		#endregion
 
 		public CalendarMonthViewModel()
 		{			
@@ -38,10 +40,11 @@ namespace CalendarApp.ViewModel
 			GoToLastMonthCommand = new RelayCommand(OnGoToLastMonth, CanGoToLastMonth);
 		}
 
+		#region Properties
 		public DateTime CurrentDate
 		{
 			get => currentDate; 
-			set =>currentDate = value;
+			set => currentDate = value;
 		}
 		public int CurrentMonth { 
 			get => currentMonth; 
@@ -49,7 +52,7 @@ namespace CalendarApp.ViewModel
 			{ 
 				currentMonth = GetCorrectNumberOfMonth(value);
 				CurrentMonthName = Constants.MonthNames[currentMonth - Constants.OneMonth];
-				NotifyPropertyChanged(currrentMonthProp);
+				NotifyPropertyChanged(CurrrentMonthProperty);
 			}
 		}
 		public string CurrentMonthName 
@@ -57,7 +60,7 @@ namespace CalendarApp.ViewModel
 			get => currentMonthName;
 			set { 
 				currentMonthName = value;
-				NotifyPropertyChanged(currentMonthNameProp);
+				NotifyPropertyChanged(CurrentMonthNameProperty);
 			}
 		}
 		public int CurrentYear 
@@ -66,7 +69,7 @@ namespace CalendarApp.ViewModel
 			set 
 			{ 
 				currentYear = value;
-				NotifyPropertyChanged(currentYearProp);
+				NotifyPropertyChanged(CurrentYearProperty);
 
 			}
 		}
@@ -76,7 +79,7 @@ namespace CalendarApp.ViewModel
 			set 
 			{ 
 				daysOfCurrentMonth = value;
-				NotifyPropertyChanged(daysOfCurrentMonthProp);
+				NotifyPropertyChanged(DaysOfCurrentMonthProperty);
 			}
 		}
 		public CalendarMonthModel CurrentCalendarMonth
@@ -90,7 +93,7 @@ namespace CalendarApp.ViewModel
 					CurrentMonth = currentCalendarMonth.MonthNumber;
 					CurrentYear = currentCalendarMonth.YearOfMonth;
 					SetMissingLastDaysOfWeekToCalendarMonth(currentCalendarMonth);
-					NotifyPropertyChanged(currentCalendarMonthProp);
+					NotifyPropertyChanged(CurrentCalendarMonthProperty);
 				}
 			}
 		}
@@ -104,6 +107,9 @@ namespace CalendarApp.ViewModel
 			get => goToLastMonthCommand;
 			set => goToLastMonthCommand = value;
 		}
+		#endregion
+
+		#region Private Methods
 
 		private void SetMissingLastDaysOfWeekToCalendarMonth(CalendarMonthModel calendarMonthModel)
 		{
@@ -165,7 +171,6 @@ namespace CalendarApp.ViewModel
 
 		}
 
-		
 		private bool CanGoToNextMonth()
 		{
 			return true;
@@ -182,7 +187,6 @@ namespace CalendarApp.ViewModel
 			CurrentCalendarMonth = new CalendarMonthModel(nextMonth, yearOfNextMonth);
 		}
 
-
 		private bool CanGoToLastMonth()
 		{			
 			return true;
@@ -198,8 +202,6 @@ namespace CalendarApp.ViewModel
 			CurrentCalendarMonth = new CalendarMonthModel(lastMonth, yearOfLastMonth);
 		}
 
-		
-		public event PropertyChangedEventHandler PropertyChanged;
 		private void NotifyPropertyChanged(String propertyName)
 		{
 			PropertyChangedEventHandler handler = PropertyChanged;
@@ -212,6 +214,15 @@ namespace CalendarApp.ViewModel
 		{
 			handler(this, new PropertyChangedEventArgs(propertyName));
 		}
+
+		#endregion
+
+		#region Events
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		#endregion
+
 
 	}
 }
