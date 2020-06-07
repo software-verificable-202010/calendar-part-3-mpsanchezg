@@ -40,7 +40,7 @@ namespace CalendarApp.Migrations
                         column: x => x.OwnerId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -60,7 +60,7 @@ namespace CalendarApp.Migrations
                         column: x => x.EventId,
                         principalTable: "Events",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserEvent_Users_UserId",
                         column: x => x.UserId,

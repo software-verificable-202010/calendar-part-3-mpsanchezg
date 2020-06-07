@@ -39,10 +39,7 @@ namespace CalendarApp.Model
 		public int YearOfMonth
 		{
 			get => yearOfMonth;
-			set
-			{
-				yearOfMonth = value;
-			}
+			set => yearOfMonth = value;
 		}
 
 		private List<CalendarDayModel> SetDaysOfTheMonth(int month, int year)

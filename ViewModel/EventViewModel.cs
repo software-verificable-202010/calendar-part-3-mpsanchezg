@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -272,6 +273,12 @@ namespace CalendarApp.ViewModel
 		private void OnEditEvent()
 		{
 			string messageBoxTitle = "Editar Evento.";
+			if (CustomEvent == null)
+			{
+				MessageBox.Show(Constants.DeletedEvent, messageBoxTitle, MessageBoxButton.OK);
+				return;
+			}
+			
 			if (!CurrentUserIsOwner())
 			{
 				MessageBox.Show(Constants.NotOwnerEditEvent, messageBoxTitle, MessageBoxButton.OK);
@@ -295,22 +302,48 @@ namespace CalendarApp.ViewModel
 		private void OnDeleteEvent()
 		{
 			string messageBoxTitle = "Eliminar Evento.";
-			if (CurrentUserIsOwner())
+			if (CustomEvent == null)
 			{
-				CurrentUserEvents.Remove(CustomEvent);
-				CurrentUserEventsCollection.Remove(CustomEvent);
-				var eventToDelete = db.Events.Where(e => e.Id == CustomEventId);
-				db.RemoveRange(eventToDelete);
+				MessageBox.Show(Constants.DeletedEvent, messageBoxTitle, MessageBoxButton.OK);
+				return;
+			}
+
+			if (EventCanBeDeleted())
+			{
+				var eventToDelete = db.Events.First(e => e.Id == CustomEventId);
+				db.Events.Remove(eventToDelete);
+				CurrentUserEvents.Remove(eventToDelete);
+				CurrentUserEventsCollection.Remove(eventToDelete);
 				db.SaveChanges();
+				MessageBox.Show(Constants.SuccessfulEditEvent, messageBoxTitle, MessageBoxButton.OK);
+				return;
 			}
 
 			MessageBox.Show(Constants.NotOwnerDeleteEvent, messageBoxTitle, MessageBoxButton.OK);
 		}
-
+		private bool EventCanBeDeleted()
+		{
+			var eventToDelete = db.Events.FirstOrDefault(e => e.Id == CustomEventId);
+			return CurrentUserIsOwner() && EventsListContainsCustomEvent() && eventToDelete!=null;
+		}
 		private bool CurrentUserIsOwner()
 		{
 			return CustomEvent.Owner.UserName == CurrentUser.UserName;
 		}
+		private bool EventsListContainsCustomEvent()
+		{
+			foreach (var eventModel in CurrentUserEvents)
+			{
+				if (eventModel.Id == CustomEventId)
+				{
+					return true; 
+				}
+			}
+
+			return false;
+		}
+
+
 
 		private List<UserModel> GetAllUsers()
 		{
@@ -340,26 +373,20 @@ namespace CalendarApp.ViewModel
 		}
 		private EventModel GetEventById(int id)
 		{
-			return db.Events.First(e=> e.Id == id);
+			// TODO: reemplazar try catch
+			try
+			{
+				var eventModel = db.Events.First(e => e.Id == id);
+				return eventModel;
+			}
+			catch
+			{
+				string messageBoxTitle = "Error.";
+				MessageBox.Show(Constants.FailedEvent, messageBoxTitle, MessageBoxButton.OK);
+			}
+
+			return null;
 		}
 
-		private UserManagerViewModel _children;
-		public UserManagerViewModel children
-		{
-			get { return _children; }
-			set
-			{
-				if (value != _children)
-				{
-					_children = value;
-					PropertyChanged += ChildOnPropertyChanged;
-					NotifyPropertyChanged("children");
-				}
-			}
-		}
-		private void ChildOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
-		{
-			CurrentUser = children.CurrentUser;
-		}
 	}
 }

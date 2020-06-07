@@ -26,10 +26,7 @@ namespace CalendarApp.Model
 		public int Id
 		{
 			get => id;
-			set
-			{
-				id = value;
-			}
+			set => id = value;
 		}
 		public UserModel User
 		{

@@ -49,6 +49,7 @@ namespace CalendarApp.Model
         public static readonly string FailedEditEvent = "Error. Revise que el evento tenga título y que las fechas sean correctas.";
         public static readonly string InvalidInvited = "El invitado debe ser válido.";
         public static readonly string InvitedAdded = "Invitado agregado al evento.";
+        public static readonly string DeletedEvent = "Este evento ya fue eliminado.";
         public static UserModel CurrentUser;
 	}
 }

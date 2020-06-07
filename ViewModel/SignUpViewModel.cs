@@ -65,9 +65,9 @@ namespace CalendarApp.ViewModel
 			if (dbUsers.Any())
 			{
 				var allUsers = dbUsers.ToList();
-				for (var userIndex = 0; userIndex < allUsers.Count; userIndex++)
+				foreach (var user in allUsers)
 				{
-					if (allUsers[userIndex].UserName == username)
+					if (user.UserName == username)
 					{
 						return false;
 					}
