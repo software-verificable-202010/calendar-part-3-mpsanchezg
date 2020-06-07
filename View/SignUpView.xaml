@@ -23,13 +23,15 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Label VerticalAlignment="Center" Grid.Row="0" Margin="278,215,0,208.6" HorizontalAlignment="Left" Grid.Column="0" Content="User Name:"/>
+            <Label VerticalAlignment="Center" Grid.Row="0" Margin="210,215,0,208.8" HorizontalAlignment="Left" Grid.Column="0" Content="Nombre de Usuario:" FontFamily="Microsoft YaHei Light" FontSize="14" Width="153"/>
             <TextBox x:Name="userNameTextBox" Text="{Binding UserName}"  Width="120" VerticalAlignment="Center" Grid.Row="0" Margin="355,215,0,211.6" Height="23" HorizontalAlignment="Left"></TextBox>
             <Button 
                 Command ="{Binding CreateUserCommand}"
                 Content="Crear cuenta" 
-                Margin="355,285,370,139.6" 
+                Margin="355,285,296.6,127.8" FontFamily="Microsoft YaHei UI" FontSize="20" 
+                Background="#FF007889" BorderBrush="#FF014B5D" Foreground="White" 
                 />
+            <Label Content="Best Calendario Ever" FontFamily="Microsoft YaHei" FontSize="48" Margin="85,65,60,64.8"/>
         </Grid>
     </Grid>
 </UserControl>

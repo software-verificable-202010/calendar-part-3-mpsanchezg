@@ -96,7 +96,6 @@ D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Projec
 D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Project\CalendarApp\bin\Debug\ru\Xceed.Wpf.AvalonDock.resources.dll
 D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Project\CalendarApp\bin\Debug\sv\Xceed.Wpf.AvalonDock.resources.dll
 D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Project\CalendarApp\bin\Debug\zh-Hans\Xceed.Wpf.AvalonDock.resources.dll
-D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Project\CalendarApp\obj\Debug\CalendarApp.csprojAssemblyReference.cache
 D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Project\CalendarApp\obj\Debug\MainWindow.g.cs
 D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Project\CalendarApp\obj\Debug\View\CalendarDayView.g.cs
 D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Project\CalendarApp\obj\Debug\View\CalendarMonthView.g.cs
@@ -129,3 +128,4 @@ D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Projec
 D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Project\CalendarApp\obj\Debug\CalendarApp.csproj.CopyComplete
 D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Project\CalendarApp\obj\Debug\CalendarApp.exe
 D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Project\CalendarApp\obj\Debug\CalendarApp.pdb
+D:\Universidad\Universidad\Anos\Sexto_Ano\Diseño de Software Verificable\Project\CalendarApp\obj\Debug\CalendarApp.csprojAssemblyReference.cache

@@ -12,43 +12,45 @@
         <viewModel:EventViewModel/>
     </UserControl.DataContext>
     <Grid>
-        <DataGrid x:Name="eventModelDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding }" Margin="210,155,190,94.6" RowDetailsVisibilityMode="VisibleWhenSelected">
-            <DataGrid.Columns>
-                <DataGridTextColumn x:Name="titleColumn" Binding="{Binding Title}" Header="Title" Width="SizeToHeader"/>
-                <DataGridTemplateColumn x:Name="startDateAndTimeColumn" Header="Start Date And Time" Width="SizeToHeader">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <DatePicker SelectedDate="{Binding StartDateAndTime, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn x:Name="finishDateAndTimeColumn" Header="Finish Date And Time" Width="SizeToHeader">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <DatePicker SelectedDate="{Binding FinishDateAndTime, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn x:Name="descriptionColumn" Binding="{Binding Description}" Header="Description" Width="SizeToHeader"/>
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button
-                                Content="Delete"
-                                />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button
-                                Content="Edit"
-                                />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+        <Label Content="Nombre del Evento" Margin="115,37,530,384.6" FontFamily="Microsoft YaHei" FontSize="14"/>
+        <ComboBox ItemsSource="{Binding Path=CurrentUserEventsCollection}"
+                  DisplayMemberPath="Title"
+                  SelectedValuePath="Id"
+                  SelectedValue="{Binding Path=CustomEventId}" Margin="275,39,310,0" FontFamily="Microsoft YaHei" FontSize="14" Height="26" VerticalAlignment="Top" />
+        <Label Content="Título" Margin="116,141,540,272.6" FontFamily="Microsoft YaHei" FontSize="16" />
+        <TextBox Text="{Binding CustomEvent.Title}" Margin="275,145,285,0" FontSize="14" FontFamily="Microsoft YaHei Light" Height="25" VerticalAlignment="Top"></TextBox>
+        <Label Content="Fecha de Inicio" Margin="115,176,435,241.6" FontFamily="Microsoft YaHei" FontSize="16" />
+        <Label Content="Fecha de Término" Margin="115,213,464,205.6" FontFamily="Microsoft YaHei" FontSize="16" />
+        <Label Content="Descripción" Margin="115,249,502,169.6" FontFamily="Microsoft YaHei" FontSize="16" />
+        <Button Content="Editar" 
+                Command="{Binding EditEventCommand}"
+                Margin="454,345,0,0" Height="35" VerticalAlignment="Top" FontFamily="Microsoft YaHei UI" FontSize="20"
+                Background="#FF007889" BorderBrush="#FF014B5D" Foreground="White" HorizontalAlignment="Left" Width="91" 
+        />
+        <Button Content="Eliminar" 
+                Command="{Binding DeleteEventCommand}"
+                Margin="250,345,0,0" Height="35" VerticalAlignment="Top" FontFamily="Microsoft YaHei UI" FontSize="20"
+                Background="#FF007889" BorderBrush="#FF014B5D" Foreground="White" HorizontalAlignment="Left" Width="91" 
+        />
+        <Label Content="Propietario" Margin="115,90,502,328.6" FontFamily="Microsoft YaHei" FontSize="16" />
+        <TextBox Text="{Binding CustomEvent.Description}" Margin="275,249,285,0" FontSize="14" FontFamily="Microsoft YaHei Light" Height="71" VerticalAlignment="Top"/>
+        <Label Content="{Binding CustomEvent.Owner.UserName}" Margin="275,90,342,328.6" FontFamily="Microsoft YaHei" FontSize="16" />
+        <DatePicker
+            HorizontalAlignment="Left"
+            SelectedDate="{Binding
+                Path=CustomEvent.FinishDateAndTime,
+                Mode=TwoWay}"
+            Margin="325,208,0,0" 
+            VerticalAlignment="Top" 
+            Width="120" RenderTransformOrigin="1.132,2.043" FontFamily="Microsoft YaHei UI Light" />
+        <DatePicker
+            HorizontalAlignment="Left"
+            SelectedDate="{Binding
+                Path=CustomEvent.StartDateAndTime,
+                Mode=TwoWay}"
+            Margin="325,180,0,0" 
+            VerticalAlignment="Top" 
+            Width="120" RenderTransformOrigin="1.132,2.043" FontFamily="Microsoft YaHei UI Light" />
+
     </Grid>
 </UserControl>

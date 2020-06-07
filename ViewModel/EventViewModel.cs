@@ -15,6 +15,7 @@ namespace CalendarApp.ViewModel
 {
 	public class EventViewModel : ViewModelBase
 	{
+		#region Private Variables
 		private string title;
 		private string description;
 		private DateTime startDateAndTime;
@@ -22,8 +23,11 @@ namespace CalendarApp.ViewModel
 		private UserModel currentUser;
 		private string invitedUser;
 		private List<EventModel> userEvents;
+		private ObservableCollection<EventModel> currentUserEventsCollection;
 		private ObservableCollection<UserModel> allUsers;
 		private ObservableCollection<UserModel> invitedUsers;
+		private int customEventId;
+		private EventModel customEvent;
 		private const string FinishDateAndTimeProperty = "FinishDateAndTime";
 		private const string StartDateAndTimeProperty = "StartDateAndTime";
 		private const string DescriptionProperty = "Description";
@@ -33,7 +37,11 @@ namespace CalendarApp.ViewModel
 		private const string InvitedUsersProperty = "InvitedUsers";
 		private const string AllUserEventsProperty = "AllUserEvents";
 		private const string InvitedUserProperty = "InvitedUser";
+		private const string CurrentUserEventsCollectionProperty = "CurrentUserEventsCollection";
+		private const string CustomEventProperty = "CustomEvent";
+		private const string CustomEventIdProperty = "CustomEventId";
 		private CalendarModelContext db;
+		#endregion
 
 		public EventViewModel()
 		{
@@ -43,11 +51,16 @@ namespace CalendarApp.ViewModel
 			// TODO: change the static variable current user
 			CurrentUser = Constants.CurrentUser;
 			CurrentUserEvents = GetUserEvents(CurrentUser);
+			CurrentUserEventsCollection = new ObservableCollection<EventModel>(CurrentUserEvents);
 			AllUsers = new ObservableCollection<UserModel>(GetAllUsers());
 			InvitedUsers = new ObservableCollection<UserModel>();
 			CreateEventCommand = new RelayCommand(OnCreateEvent, CanCreateEvent);
 			AddInvitedUsersCommand = new RelayCommand(OnInviteUsers, CanInviteUsers);
+			EditEventCommand = new RelayCommand(OnEditEvent, CanEditEvent);
+			DeleteEventCommand = new RelayCommand(OnDeleteEvent, CanDeleteEvent);
 		}
+
+		#region Properties
 
 		public DateTime FinishDateAndTime
 		{
@@ -136,16 +149,52 @@ namespace CalendarApp.ViewModel
 				NotifyPropertyChanged(InvitedUsersProperty);
 			}
 		}
-
+		public ObservableCollection<EventModel> CurrentUserEventsCollection
+		{
+			get => currentUserEventsCollection;
+			set
+			{
+				currentUserEventsCollection = value;
+				NotifyPropertyChanged(CurrentUserEventsCollectionProperty);
+			}
+		}
+		public EventModel CustomEvent
+		{
+			get => customEvent;
+			set
+			{
+				customEvent = value;
+				NotifyPropertyChanged(CustomEventProperty);
+			}
+		}
+		public int CustomEventId
+		{
+			get => customEventId;
+			set
+			{
+				customEventId = value;
+				CustomEvent = GetEventById(customEventId);
+				NotifyPropertyChanged(CustomEventIdProperty);
+			}
+		}
 		public RelayCommand CreateEventCommand
 		{
 			get;
-		} 
+		}
 		public RelayCommand AddInvitedUsersCommand
 		{
 			get;
 		}
+		public RelayCommand EditEventCommand
+		{
+			get;
+		}
+		public RelayCommand DeleteEventCommand
+		{
+			get;
+		}
 
+		#endregion
 
 		private bool CanCreateEvent()
 		{
@@ -205,7 +254,50 @@ namespace CalendarApp.ViewModel
 			}
 		}
 
+		private bool CanEditEvent()
+		{
+			return true;
+		}
+		private void OnEditEvent()
+		{
+			string messageBoxTitle = "Editar Evento.";
+			if (!CurrentUserIsOwner())
+			{
+				MessageBox.Show(Constants.NotOwnerEventMessage, messageBoxTitle, MessageBoxButton.OK);
+				return;
+			}
+			if (AreValidData(CustomEvent.Title, CustomEvent.StartDateAndTime, CustomEvent.FinishDateAndTime))
+			{
+				db.Events.Update(CustomEvent);
+				db.SaveChanges();
+				MessageBox.Show(Constants.SuccessfulEvent, messageBoxTitle, MessageBoxButton.OK);
+				return;
+			}
+			MessageBox.Show(Constants.FailedEvent, messageBoxTitle, MessageBoxButton.OK);
+			return;
+		}
+		
 
+		private bool CanDeleteEvent()
+		{
+			return true;
+		}
+		private void OnDeleteEvent()
+		{
+			if (CurrentUserIsOwner())
+			{
+				CurrentUserEvents.Remove(CustomEvent);
+				CurrentUserEventsCollection.Remove(CustomEvent);
+				var eventToDelete = db.Events.Where(e => e.Id == CustomEventId);
+				db.RemoveRange(eventToDelete);
+				db.SaveChanges();
+			}
+		}
+
+		private bool CurrentUserIsOwner()
+		{
+			return CustomEvent.Owner.UserName == CurrentUser.UserName;
+		}
 
 		private List<UserModel> GetAllUsers()
 		{
@@ -233,8 +325,10 @@ namespace CalendarApp.ViewModel
 		{
 			return startDateAndTime < finishDateAndTime && title != null;
 		}
-
-		// TODO: hacer que los usuarios puedan invitar a otros
+		private EventModel GetEventById(int id)
+		{
+			return db.Events.First(e=> e.Id == id);
+		}
 
 		private UserManagerViewModel _children;
 		public UserManagerViewModel children

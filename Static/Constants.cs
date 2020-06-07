@@ -43,6 +43,7 @@ namespace CalendarApp.Model
         public static readonly string FailedUser = "El nombre de usuario ya existe. Por favor, intente con otro nombre.";
         public static readonly string FailedLogin = "Nombre de usuario inválido.";
         public static readonly string MainWindow = "MainWindow";
+        public static readonly string NotOwnerEventMessage = "No puedes editar un evento que no es tuyo.";
         public static UserModel CurrentUser;
 	}
 }
